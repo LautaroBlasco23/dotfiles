@@ -3,19 +3,20 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BIN_DIR="$HOME/bin"
 CONFIG_DIR="$HOME/.config"
 
-echo "== Dotfiles installer =="
+echo "== Installing dotfiles =="
 
 mkdir -p "$CONFIG_DIR"
+mkdir -p "$BIN_DIR"
 
 backup() {
   local target="$1"
 
   if [ -e "$target" ] && [ ! -L "$target" ]; then
-    local backup="${target}.backup.$(date +%s)"
-    echo "📦 Backing up $target -> $backup"
-    mv "$target" "$backup"
+    mv "$target" "$target.backup.$(date +%s)"
+    echo "Backup created for $target"
   fi
 }
 
@@ -25,48 +26,30 @@ link() {
 
   backup "$dest"
 
-  if [ -L "$dest" ]; then
-    echo "✔ $dest already linked"
-    return
-  fi
-
-  ln -s "$src" "$dest"
-  echo "🔗 $dest -> $src"
-}
-
-detect_os() {
-  case "$(uname -s)" in
-    Linux) OS="linux" ;;
-    Darwin) OS="mac" ;;
-    *) OS="unknown" ;;
-  esac
-}
-
-install_packages_linux() {
-  if command -v apt >/dev/null; then
-    sudo apt update
-    sudo apt install -y neovim ripgrep fd-find git curl
-  elif command -v pacman >/dev/null; then
-    sudo pacman -S --noconfirm neovim ripgrep fd git curl
+  if [ ! -L "$dest" ]; then
+    ln -s "$src" "$dest"
+    echo "Linked $dest -> $src"
   fi
 }
 
-install_packages_mac() {
-  if command -v brew >/dev/null; then
-    brew install neovim ripgrep fd git
-  fi
+install_scripts() {
+  echo "== Installing global commands =="
+
+  for script in "$REPO_DIR/scripts/"*; do
+    name=$(basename "$script")
+
+    ln -sf "$script" "$BIN_DIR/$name"
+    chmod +x "$script"
+
+    echo "Installed command: $name"
+  done
 }
 
-install_packages() {
-  detect_os
-
-  echo "== Installing dependencies ($OS) =="
-
-  case "$OS" in
-    linux) install_packages_linux ;;
-    mac) install_packages_mac ;;
-    *) echo "⚠ Unknown OS. Skipping package install." ;;
-  esac
+ensure_path() {
+  if ! echo "$PATH" | grep -q "$HOME/bin"; then
+    echo 'export PATH="$HOME/bin:$PATH"' >> "$HOME/.bashrc"
+    echo "Added ~/bin to PATH"
+  fi
 }
 
 setup_links() {
@@ -77,11 +60,12 @@ setup_links() {
 }
 
 main() {
-  install_packages
+  ensure_path
+  install_scripts
   setup_links
 
   echo ""
-  echo "✅ Dotfiles installed successfully"
+  echo "Dotfiles installed."
 }
 
 main

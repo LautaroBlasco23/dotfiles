@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cd "$HOME/dotfiles" || exit
+git pull
+
+echo "Dotfiles updated."
