@@ -1,0 +1,18 @@
+# Claude runtime and execution data
+.credentials.json
+history.jsonl
+mcp-needs-auth-cache.json
+settings.json
+
+# Session and temporary data
+session-env/
+shell-snapshots/
+cache/
+downloads/
+file-history/
+
+# Claude internal data
+backups/
+plans/
+projects/
+plugins/
