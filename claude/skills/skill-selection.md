@@ -1,3 +1,9 @@
+---
+name: skill-selection
+slug: skill-selection
+description: How to choose and apply the right skills
+---
+
 # Skill Selection
 
 When solving development tasks:

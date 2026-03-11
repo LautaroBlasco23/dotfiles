@@ -1,3 +1,9 @@
+---
+name: architecture
+slug: architecture
+description: Guidance on system architecture and design patterns
+---
+
 # Architecture Prompt
 
 When designing systems:

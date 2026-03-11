@@ -1,3 +1,9 @@
+---
+name: commit-messages
+slug: commit-messages
+description: Guidelines for writing commit messages
+---
+
 # Commit Message Rules
 
 Use Conventional Commits.

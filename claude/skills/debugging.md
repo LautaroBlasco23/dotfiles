@@ -1,3 +1,9 @@
+---
+name: debugging
+slug: debugging
+description: Systematic debugging approach and techniques
+---
+
 # Debugging Prompt
 
 When debugging issues:

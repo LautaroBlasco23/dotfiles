@@ -1,3 +1,9 @@
+---
+name: coding-agent
+slug: coding-agent
+description: Guidelines for the coding agent persona
+---
+
 # Coding Agent
 
 Responsibilities:
