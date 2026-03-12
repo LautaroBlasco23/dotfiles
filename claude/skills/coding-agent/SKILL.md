@@ -1,7 +1,9 @@
 ---
 name: coding-agent
 slug: coding-agent
-description: Guidelines for the coding agent persona
+description: >-
+  Guidelines for the coding agent persona.
+  TRIGGER when: user asks to implement a feature, write new code, or build something from scratch.
 ---
 
 # Coding Agent

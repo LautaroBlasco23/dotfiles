@@ -1,7 +1,10 @@
 ---
 name: commit-messages
 slug: commit-messages
-description: Guidelines for writing commit messages
+description: >-
+  Guidelines for writing commit messages.
+  TRIGGER when: user asks to commit, create a commit, write a commit message, or uses /commit.
+  DO NOT TRIGGER for general coding tasks.
 ---
 
 # Commit Message Rules

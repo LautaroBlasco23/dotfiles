@@ -1,7 +1,9 @@
 ---
 name: skill-selection
 slug: skill-selection
-description: How to choose and apply the right skills
+description: >-
+  How to choose and apply the right skills.
+  TRIGGER when: task is ambiguous, involves multiple domains, or user asks for advice on approach.
 ---
 
 # Skill Selection

@@ -1,7 +1,10 @@
 ---
 name: debugging
 slug: debugging
-description: Systematic debugging approach and techniques
+description: >-
+  Systematic debugging approach and techniques.
+  TRIGGER when: user reports a bug, error, unexpected behavior, or asks to debug/fix/investigate.
+  DO NOT TRIGGER for feature work with no reported error.
 ---
 
 # Debugging Prompt

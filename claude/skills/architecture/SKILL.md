@@ -1,7 +1,10 @@
 ---
 name: architecture
 slug: architecture
-description: Guidance on system architecture and design patterns
+description: >-
+  Guidance on system architecture and design patterns.
+  TRIGGER when: user asks to design a system, plan a new service, choose a pattern, or review architecture.
+  DO NOT TRIGGER for small, isolated changes.
 ---
 
 # Architecture Prompt
