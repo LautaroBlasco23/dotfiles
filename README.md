@@ -77,17 +77,7 @@ rsync -av ~/.config/nvim/ ~/dotfiles/nvim/
 Install the Claude Code CLI tool:
 
 ```bash
-npm install -g @anthropic-ai/claude-code
-```
-
-Or with other package managers:
-
-```bash
-# Homebrew
-brew install anthropic/claude-code/claude-code
-
-# Or use npx without installing
-npx @anthropic-ai/claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 ---
