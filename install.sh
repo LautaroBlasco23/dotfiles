@@ -11,6 +11,17 @@ echo "== Installing dotfiles =="
 mkdir -p "$CONFIG_DIR"
 mkdir -p "$BIN_DIR"
 
+install_dependencies() {
+  echo "== Installing dependencies =="
+
+  if ! command -v jq &>/dev/null; then
+    sudo apt-get install -y jq
+    echo "Installed: jq"
+  else
+    echo "Already installed: jq"
+  fi
+}
+
 backup() {
   local target="$1"
 
@@ -60,6 +71,7 @@ setup_links() {
 }
 
 main() {
+  install_dependencies
   ensure_path
   install_scripts
   setup_links
