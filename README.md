@@ -72,6 +72,16 @@ rsync -av ~/.config/nvim/ ~/dotfiles/nvim/
 
 ---
 
+## Claude Code installation
+
+Install the Claude Code CLI tool:
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+---
+
 ## One-command install
 
 ```bash
