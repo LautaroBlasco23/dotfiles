@@ -44,16 +44,7 @@ link() {
 }
 
 install_scripts() {
-  echo "== Installing global commands =="
-
-  for script in "$REPO_DIR/scripts/"*; do
-    name=$(basename "$script")
-
-    ln -sf "$script" "$BIN_DIR/$name"
-    chmod +x "$script"
-
-    echo "Installed command: $name"
-  done
+  bash "$REPO_DIR/scripts/init.sh"
 }
 
 ensure_path() {

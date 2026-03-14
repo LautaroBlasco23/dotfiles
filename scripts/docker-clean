@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MODE=${1:-}
+
+if [ "$MODE" = "--all" ]; then
+  echo "Removing all unused Docker images..."
+  docker image prune -a -f
+else
+  echo "Removing dangling Docker images..."
+  docker image prune -f
+fi
+
+echo "Done."
