@@ -6,6 +6,7 @@ Includes:
 
 - Claude workflow configuration (~/.claude)
 - Neovim configuration (~/.config/nvim)
+- Custom terminal commands (see below)
 
 ---
 
@@ -49,41 +50,24 @@ Because the configs are symlinked, updates apply automatically.
 
 ---
 
-## Repository structure
+## Custom Commands
 
-dotfiles/
-├── claude/
-│   ├── CLAUDE.md
-│   ├── agents/
-│   ├── skills/
-│   └── prompts/
-├── nvim/
-└── install.sh
+Commands added to `~/bin` by the installer:
 
----
-
-## Copy existing Neovim config
-
-If you already have a Neovim setup:
-
-```bash
-rsync -av ~/.config/nvim/ ~/dotfiles/nvim/
-```
+| Command | Description |
+|---|---|
+| `update-workflow` | Pull latest dotfiles from git |
+| `workflow-status` | Show dotfiles git status |
+| `docker-clean` | Prune dangling Docker images (`--all` to remove all unused) |
 
 ---
 
-## Claude Code installation
+## Links to install the used tools
 
-Install the Claude Code CLI tool:
+Claude:
 
-```bash
-curl -fsSL https://claude.ai/install.sh | bash
-```
+https://code.claude.com/docs/en/quickstart
 
----
+Neovim:
 
-## One-command install
-
-```bash
-git clone git@github.com:lautaroblasco23/dotfiles.git ~/dotfiles && cd ~/dotfiles && ./install.sh
-```
+https://neovim.io/doc/install/
