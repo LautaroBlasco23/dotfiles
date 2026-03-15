@@ -41,3 +41,18 @@ Avoid things like:
 - "AI-assisted commit"
 - "co-authored-by Claude"
 - any reference to AI tools
+
+## Atomic Commits
+
+Do NOT create a single large commit for multiple unrelated changes.
+
+Before committing:
+1. Run `git diff` and `git status` to review all changes.
+2. Identify distinct logical units (feature, fix, refactor, docs, chore).
+3. Stage and commit each unit separately.
+
+Rules:
+- One commit = one logical change
+- Use `git add -p` or selective file staging to isolate hunks when needed
+- If two changes are tightly coupled, use the dominant type and mention the secondary concern in the commit body
+- State the split you made (e.g., "splitting into 2 commits: feat + fix") before committing
