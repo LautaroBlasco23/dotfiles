@@ -2,7 +2,6 @@
 .credentials.json
 history.jsonl
 mcp-needs-auth-cache.json
-settings.json
 
 # Session and temporary data
 session-env/
@@ -10,6 +9,8 @@ shell-snapshots/
 cache/
 downloads/
 file-history/
+paste-cache/
+sessions/
 
 # Claude internal data
 backups/
