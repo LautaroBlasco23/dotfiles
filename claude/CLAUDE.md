@@ -41,5 +41,20 @@ Available skills are auto-triggered based on task context:
 - **architecture**: use when designing systems or choosing patterns
 - **coding-agent**: use when implementing features from scratch
 - **skill-selection**: use when task scope is unclear or multi-domain
+- **dev-pipeline**: orchestrates planner -> researcher -> implementer -> reviewer pipeline
+- **docs-writer**: shared .docs/ output convention (not auto-triggered, loaded by agents)
 
 Skills can also be invoked manually with slash commands (e.g., `/commit-messages`).
+
+## Agents
+
+Custom agents for structured development. Each writes artifacts to `.docs/` (gitignored per-project).
+
+| Agent         | Model  | Purpose                                      | Output                         |
+|---------------|--------|----------------------------------------------|--------------------------------|
+| **planner**   | opus   | Explores codebase, produces implementation plan | `.docs/plan.md`               |
+| **researcher**| haiku  | Finds patterns and conventions in codebase    | `.docs/research.md`           |
+| **implementer**| sonnet | Writes code following plan + research        | `.docs/implementation-log.md` |
+| **reviewer**  | sonnet | Reviews implementation against plan           | `.docs/review.md`             |
+
+Use individually (`@planner "add auth"`) or as a full pipeline (`/dev-pipeline`).
