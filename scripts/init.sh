@@ -11,6 +11,17 @@ if ! echo "$PATH" | grep -q "$HOME/bin"; then
   echo "Added ~/bin to PATH"
 fi
 
+echo "== Cleaning stale symlinks in ~/bin =="
+
+for link in "$BIN_DIR"/*; do
+  [ -L "$link" ] || continue
+  target=$(readlink "$link")
+  if [[ "$target" == "$SCRIPT_DIR"/* ]] && [ ! -e "$link" ]; then
+    rm "$link"
+    echo "Removed: $(basename "$link")"
+  fi
+done
+
 echo "== Linking scripts to ~/bin =="
 
 for script in "$SCRIPT_DIR"/*; do
