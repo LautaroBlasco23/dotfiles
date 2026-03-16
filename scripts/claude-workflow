@@ -1,0 +1,193 @@
+#!/usr/bin/env bash
+# claude-workflow — manage Claude Code workflow profiles
+#
+# Usage:
+#   claude-workflow list              list available workflows
+#   claude-workflow status            show active workflow summary
+#   claude-workflow switch <name>     switch to a workflow
+#   claude-workflow new <name>        scaffold a new workflow from the active one
+
+set -euo pipefail
+
+DOTFILES="${DOTFILES:-$HOME/dotfiles}"
+WORKFLOWS_DIR="$DOTFILES/claude-workflows"
+CLAUDE_DIR="$DOTFILES/claude"
+ACTIVE_FILE="$WORKFLOWS_DIR/.active"
+
+# ── helpers ──────────────────────────────────────────────────────────────────
+
+active_workflow() {
+  if [[ -f "$ACTIVE_FILE" ]]; then
+    tr -d '[:space:]' < "$ACTIVE_FILE"
+  else
+    echo "(none)"
+  fi
+}
+
+workflow_description() {
+  local name="$1"
+  local claude_md="$WORKFLOWS_DIR/$name/CLAUDE.md"
+  if [[ -f "$claude_md" ]]; then
+    # extract first non-empty line after the h1 heading
+    awk '/^# /{found=1; next} found && /[^[:space:]]/{print; exit}' "$claude_md"
+  else
+    echo "(no description)"
+  fi
+}
+
+log() { printf '\033[1;34m::\033[0m %s\n' "$*"; }
+ok()  { printf '\033[1;32m✓\033[0m  %s\n' "$*"; }
+err() { printf '\033[1;31m✗\033[0m  %s\n' "$*" >&2; }
+
+# ── commands ──────────────────────────────────────────────────────────────────
+
+cmd_list() {
+  local active
+  active=$(active_workflow)
+
+  log "Available workflows in $WORKFLOWS_DIR"
+  echo ""
+
+  for dir in "$WORKFLOWS_DIR"/*/; do
+    local name
+    name=$(basename "$dir")
+    local desc
+    desc=$(workflow_description "$name")
+    local agents skills
+
+    agents=$(find "$dir/agents" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+    skills=$(find "$dir/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
+
+    if [[ "$name" == "$active" ]]; then
+      printf '  \033[1;32m● %-20s\033[0m %s  \033[2m(%s agents, %s skills)\033[0m\n' \
+        "$name" "$desc" "$agents" "$skills"
+    else
+      printf '    \033[2m%-20s\033[0m %s  \033[2m(%s agents, %s skills)\033[0m\n' \
+        "$name" "$desc" "$agents" "$skills"
+    fi
+  done
+
+  echo ""
+}
+
+cmd_status() {
+  local active
+  active=$(active_workflow)
+
+  log "Active workflow: $active"
+  echo ""
+
+  local workflow_dir="$WORKFLOWS_DIR/$active"
+
+  if [[ ! -d "$workflow_dir" ]]; then
+    err "Workflow directory not found: $workflow_dir"
+    exit 1
+  fi
+
+  echo "  Agents:"
+  for f in "$workflow_dir/agents"/*.md; do
+    [[ -f "$f" ]] || continue
+    local name
+    name=$(basename "$f" .md)
+    local model
+    model=$(awk '/^model:/{print $2; exit}' "$f")
+    printf '    %-20s %s\n' "$name" "${model:-(no model)}"
+  done
+
+  echo ""
+  echo "  Skills:"
+  for d in "$workflow_dir/skills"/*/; do
+    [[ -d "$d" ]] || continue
+    printf '    %s\n' "$(basename "$d")"
+  done
+
+  echo ""
+}
+
+cmd_switch() {
+  local name="${1:-}"
+  if [[ -z "$name" ]]; then
+    err "Usage: claude-workflow switch <name>"
+    exit 1
+  fi
+
+  local workflow_dir="$WORKFLOWS_DIR/$name"
+  if [[ ! -d "$workflow_dir" ]]; then
+    err "Workflow '$name' not found. Run 'claude-workflow list' to see available workflows."
+    exit 1
+  fi
+
+  local active
+  active=$(active_workflow)
+
+  if [[ "$name" == "$active" ]]; then
+    ok "Already on workflow: $name"
+    exit 0
+  fi
+
+  log "Switching from '$active' to '$name'..."
+
+  # sync workflow files into claude/
+  rsync -a --delete \
+    --exclude='*.jsonl' \
+    --exclude='backups/' \
+    --exclude='cache/' \
+    --exclude='file-history/' \
+    --exclude='history*' \
+    --exclude='paste-cache/' \
+    --exclude='plans/' \
+    --exclude='projects/' \
+    --exclude='session-env/' \
+    --exclude='sessions/' \
+    --exclude='shell-snapshots/' \
+    --exclude='telemetry/' \
+    "$workflow_dir/" "$CLAUDE_DIR/"
+
+  echo "$name" > "$ACTIVE_FILE"
+
+  ok "Switched to workflow: $name"
+  echo ""
+  cmd_status
+}
+
+cmd_new() {
+  local name="${1:-}"
+  if [[ -z "$name" ]]; then
+    err "Usage: claude-workflow new <name>"
+    exit 1
+  fi
+
+  local new_dir="$WORKFLOWS_DIR/$name"
+  if [[ -d "$new_dir" ]]; then
+    err "Workflow '$name' already exists."
+    exit 1
+  fi
+
+  local active
+  active=$(active_workflow)
+  local source_dir="$WORKFLOWS_DIR/$active"
+
+  log "Scaffolding '$name' from '$active'..."
+
+  cp -r "$source_dir" "$new_dir"
+
+  ok "Created workflow: $name"
+  echo "  Edit: $new_dir/CLAUDE.md"
+  echo ""
+}
+
+# ── dispatch ──────────────────────────────────────────────────────────────────
+
+cmd="${1:-list}"
+shift || true
+
+case "$cmd" in
+  list)   cmd_list ;;
+  status) cmd_status ;;
+  switch) cmd_switch "$@" ;;
+  new)    cmd_new "$@" ;;
+  *)
+    echo "Usage: claude-workflow <list|status|switch <name>|new <name>>"
+    exit 1
+    ;;
+esac
