@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "agents": {
+    "general": {
+      "provider": "ollama",
+      "model": "phi3:mini",
+      "settings": {
+        "temperature": 0.7,
+        "num_ctx": 32768
+      }
+    },
+    "research": {
+      "provider": "ollama",
+      "model": "tinyllama:1.1b",
+      "settings": {
+        "temperature": 0.3,
+        "num_ctx": 8192
+      }
+    },
+    "coding": {
+      "provider": "ollama",
+      "model": "codellama:7b-instruct",
+      "settings": {
+        "temperature": 0.2,
+        "num_ctx": 16384
+      }
+    }
+  }
+}
