@@ -59,6 +59,7 @@ setup_links() {
 
   link "$REPO_DIR/claude" "$HOME/.claude"
   link "$REPO_DIR/nvim" "$CONFIG_DIR/nvim"
+  link "$REPO_DIR/opencode" "$CONFIG_DIR/opencode"
 }
 
 main() {
