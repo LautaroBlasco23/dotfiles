@@ -6,9 +6,19 @@ MODE=${1:-}
 if [ "$MODE" = "--all" ]; then
   echo "Removing all unused Docker images..."
   docker image prune -a -f
+
+  echo "Removing all build cache..."
+  docker builder prune -a -f
+
+  echo "Removing unused volumes..."
+  docker volume prune -f
+
 else
   echo "Removing dangling Docker images..."
   docker image prune -f
+
+  echo "Removing dangling build cache..."
+  docker builder prune -f
 fi
 
 echo "Done."
