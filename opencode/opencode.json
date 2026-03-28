@@ -31,7 +31,7 @@
   },
   "agent": {
     "build": {
-      "model": "opencode/big-pickle",
+      "model": "opencode/minimax-m2.5-free",
       "temperature": 0.2
     },
     "plan": {
