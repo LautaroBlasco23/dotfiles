@@ -62,7 +62,7 @@ Commands added to `~/bin` by the installer:
 | Command | Description |
 |---|---|
 | `claude-workflow` | Interactive TUI to manage Claude workflow profiles |
-| `docker-clean` | Prune dangling Docker images (`--all` to remove all unused) |
+| `docker-clean` | Prune dangling Docker images and build cache (`--all` to remove all unused images, build cache, and volumes) |
 
 ### claude-workflow
 
