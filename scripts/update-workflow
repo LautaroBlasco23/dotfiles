@@ -1,71 +1,33 @@
 #!/usr/bin/env bash
-# update-workflow — pull latest and sync current workflow
+# update-workflow — pull latest dotfiles from origin/main
 
 set -euo pipefail
 
 DOTFILES="${DOTFILES:-$HOME/dotfiles}"
-WORKFLOWS_DIR="$DOTFILES/claude-workflows"
-CLAUDE_DIR="$DOTFILES/claude"
-ACTIVE_FILE="$WORKFLOWS_DIR/.active"
 
 if [[ -t 1 ]]; then
   R=$'\033[0m'
   BOLD=$'\033[1m'
-  CYAN=$'\033[36m'
   GREEN=$'\033[32m'
   RED=$'\033[31m'
-  GRAY=$'\033[90m'
   BCYAN=$'\033[96m'
 else
-  R=''; BOLD=''; CYAN=''; GREEN=''; RED=''; GRAY=''; BCYAN=''
+  R=''; BOLD=''; GREEN=''; RED=''; BCYAN=''
 fi
 
 log()    { printf "${BOLD}${BCYAN}  ◆${R}  ${BOLD}%s${R}\n" "$*"; }
 ok()     { printf "${GREEN}  ✓${R}  %s\n" "$*"; }
 err()    { printf "${RED}  ✗${R}  %s\n" "$*" >&2; }
 
-active_workflow() {
-  if [[ -f "$ACTIVE_FILE" ]]; then
-    tr -d '[:space:]' < "$ACTIVE_FILE"
-  else
-    echo ""
-  fi
-}
-
-log "Pulling latest from origin/main…"
-if ! git -C "$DOTFILES" pull origin main; then
-  err "Failed to pull from origin/main."
-  exit 1
-fi
-ok "Pulled latest changes."
-
-active=$(active_workflow)
-if [[ -z "$active" ]]; then
-  err "No active workflow set. Run 'claude-workflow switch <name>' first."
+log "Fetching latest from origin/main…"
+if ! git -C "$DOTFILES" fetch origin; then
+  err "Failed to fetch from origin."
   exit 1
 fi
 
-log "Syncing workflow: $active"
-workflow_dir="$WORKFLOWS_DIR/$active"
-
-if [[ ! -d "$workflow_dir" ]]; then
-  err "Workflow directory not found: $workflow_dir"
+if ! git -C "$DOTFILES" merge --ff-only origin/main; then
+  err "Cannot fast-forward to origin/main. Local commits may exist."
   exit 1
 fi
 
-rsync -a --delete \
-  --exclude='*.jsonl' \
-  --exclude='backups/' \
-  --exclude='cache/' \
-  --exclude='file-history/' \
-  --exclude='history*' \
-  --exclude='paste-cache/' \
-  --exclude='plans/' \
-  --exclude='projects/' \
-  --exclude='session-env/' \
-  --exclude='sessions/' \
-  --exclude='shell-snapshots/' \
-  --exclude='telemetry/' \
-  "$workflow_dir/" "$CLAUDE_DIR/"
-
-ok "Workflow '${BOLD}$active${R}' updated."
+ok "Dotfiles updated to latest origin/main."
