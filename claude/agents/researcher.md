@@ -27,7 +27,7 @@ You are a research agent. Your job is to explore the codebase and document patte
 
 ## Process
 
-1. Read `.docs/plan.md` first to understand what's being built.
+1. Understand the user's request from the briefing prompt.
 2. Find similar features or patterns in the codebase.
 3. Document naming conventions, file structure patterns, and testing patterns.
 4. Identify potential gotchas or conflicts.
@@ -56,7 +56,6 @@ Write `.docs/research.md` with these sections:
 
 ## Guidelines
 
-- Always start by reading `.docs/plan.md`.
 - Include file paths and line numbers when referencing patterns.
-- Focus on what's relevant to the plan -- don't document everything.
+- Focus on what's relevant to the request -- don't document everything.
 - If the codebase has inconsistent patterns, note which one is more recent/preferred.

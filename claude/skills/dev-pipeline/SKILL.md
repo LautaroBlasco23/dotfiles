@@ -2,36 +2,42 @@
 name: dev-pipeline
 slug: dev-pipeline
 description: >-
-  Orchestrates the planner -> researcher -> implementer -> reviewer pipeline.
+  Orchestrates the researcher -> planner -> implementer(s) -> preflighter pipeline.
   TRIGGER when: user says "run dev-pipeline", "develop this", "full pipeline",
   or asks to run the structured development workflow.
 ---
 
 # Dev Pipeline
 
-Orchestrate the 4-phase development pipeline using custom agents.
+Orchestrate the development pipeline using custom agents.
 
 ## Pipeline phases
 
 Run these phases **sequentially** -- each depends on the previous:
 
-1. **Plan** -- invoke the `planner` agent with the user's request
+1. **Research** -- invoke the `researcher` agent with the user's request
+   - Prompt: "Research the codebase for patterns relevant to: <user request>"
+   - After completion, read `.docs/research.md` and present a summary to the user
+   - Wait for user confirmation before proceeding
+
+2. **Plan** -- invoke the `planner` agent
+   - Prompt: "Read .docs/research.md and produce an implementation plan for: <user request>"
    - After completion, read `.docs/plan.md` and present a summary to the user
+   - Pay attention to the **Execution Strategy** section -- it defines how many implementer streams to use
    - Wait for user confirmation before proceeding
 
-2. **Research** -- invoke the `researcher` agent
-   - Prompt: "Read .docs/plan.md and research the codebase for relevant patterns"
-   - After completion, read `.docs/research.md` and present a summary
+3. **Implement** -- invoke implementer agent(s) based on the plan's Execution Strategy
+   - Read `.docs/plan.md` and parse the `## Execution Strategy` section
+   - If **1 stream**: invoke a single `implementer` agent
+     - Prompt: "Read .docs/plan.md and .docs/research.md, then implement the plan"
+   - If **multiple streams**: invoke implementer agents **in parallel** (one per stream)
+     - Each agent gets a targeted prompt: "Read .docs/research.md for codebase patterns. Your task is to implement **Stream N: <name>** from .docs/plan.md. Only implement the steps listed in your stream: steps <X, Y, Z>. Files you own: <list>. Context: <context needed from plan>. Do NOT touch files outside your stream."
+   - After all implementers complete, read their `.docs/implementation-log.md` outputs and present a summary
    - Wait for user confirmation before proceeding
 
-3. **Implement** -- invoke the `implementer` agent
-   - Prompt: "Read .docs/plan.md and .docs/research.md, then implement the plan"
-   - After completion, read `.docs/implementation-log.md` and present a summary
-   - Wait for user confirmation before proceeding
-
-4. **Review** -- invoke the `reviewer` agent
-   - Prompt: "Read all .docs/ artifacts and git diff, then review the implementation"
-   - After completion, read `.docs/review.md` and present the full review
+4. **Preflight** -- invoke the `preflighter` agent
+   - Prompt: "Run build, check, and tests to verify the implementation. Read .docs/plan.md for testing strategy context."
+   - After completion, read `.docs/preflight.md` and present the full results
 
 ## Skip confirmations
 
@@ -39,13 +45,18 @@ If the user says "full pipeline", "run all", or "no confirmations", skip the con
 
 ## How to invoke agents
 
-Use the Agent tool with the appropriate agent:
-
 ```
-Agent(subagent_type="planner", prompt="<user request>")
-Agent(subagent_type="researcher", prompt="Read .docs/plan.md and research the codebase")
-Agent(subagent_type="implementer", prompt="Read .docs/plan.md and .docs/research.md, then implement")
-Agent(subagent_type="reviewer", prompt="Read all .docs/ artifacts and git diff, then review")
+Agent(subagent_type="researcher", prompt="Research the codebase for patterns relevant to: <user request>")
+Agent(subagent_type="planner", prompt="Read .docs/research.md and produce an implementation plan for: <user request>")
+
+# Single implementer:
+Agent(subagent_type="implementer", prompt="Read .docs/plan.md and .docs/research.md, then implement the plan")
+
+# Parallel implementers (launch in a single message):
+Agent(subagent_type="implementer", prompt="...stream 1 prompt...")
+Agent(subagent_type="implementer", prompt="...stream 2 prompt...")
+
+Agent(subagent_type="preflighter", prompt="Run build, check, and tests to verify the implementation")
 ```
 
 ## Prerequisites
@@ -56,7 +67,7 @@ Before starting the pipeline, verify:
 
 ## After the pipeline
 
-Present the review summary and ask the user if they want to:
-- Fix any issues found by the reviewer
+Present the preflight results and ask the user if they want to:
+- Fix any issues found by the preflighter
 - Commit the changes
 - Run the pipeline again with adjustments

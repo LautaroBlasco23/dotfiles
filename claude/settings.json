@@ -1,4 +1,5 @@
 {
+  "model": "haiku",
   "statusLine": {
     "type": "command",
     "command": "~/.claude/scripts/context-bar.sh"

@@ -41,9 +41,9 @@ The project's git history preserves code changes independently.
 
 ## Output files
 
-| Agent       | File                          |
-|-------------|-------------------------------|
-| planner     | `.docs/plan.md`               |
-| researcher  | `.docs/research.md`           |
-| implementer | `.docs/implementation-log.md` |
-| reviewer    | `.docs/review.md`             |
+| Agent         | File                          |
+|---------------|-------------------------------|
+| planner       | `.docs/plan.md`               |
+| researcher    | `.docs/research.md`           |
+| implementer   | `.docs/implementation-log.md` |
+| preflighter   | `.docs/preflight.md`          |
