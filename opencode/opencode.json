@@ -25,17 +25,20 @@
         },
         "trinity-large-preview-free": {
           "name": "Trinity Large Preview Free"
+        },
+        "qwen3-6-plus-free": {
+          "name": "Qwen 3.6 Plus Free"
         }
       }
     }
   },
   "agent": {
     "build": {
-      "model": "opencode/trinity-large-preview-free",
+      "model": "opencode/big-pickle",
       "temperature": 0.2
     },
     "plan": {
-      "model": "opencode/trinity-large-preview-free",
+      "model": "opencode/big-pickle",
       "temperature": 0.2
     },
     "research": {
@@ -43,7 +46,7 @@
       "temperature": 0.4
     },
     "coding": {
-      "model": "opencode/mimo-v2-pro-free",
+      "model": "opencode/minimax-m2.5-free",
       "temperature": 0.2
     },
     "review": {
