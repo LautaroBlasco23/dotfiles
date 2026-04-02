@@ -6,6 +6,7 @@ Includes:
 
 - Claude workflow configuration (~/.claude)
 - Neovim configuration (~/.config/nvim)
+- Opencode configuration (~/.config/opencode)
 - Custom terminal commands (see below)
 
 ---
@@ -34,6 +35,7 @@ Result:
 
 ~/.claude        -> ~/dotfiles/claude
 ~/.config/nvim   -> ~/dotfiles/nvim
+~/.config/opencode -> ~/dotfiles/opencode
 
 ---
 
@@ -89,3 +91,7 @@ https://code.claude.com/docs/en/quickstart
 Neovim:
 
 https://neovim.io/doc/install/
+
+Opencode:
+
+https://opencode.ai
