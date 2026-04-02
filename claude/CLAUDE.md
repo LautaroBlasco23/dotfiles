@@ -53,11 +53,14 @@ Skills can also be invoked manually with slash commands (e.g., `/commit-messages
 
 Custom agents for structured development. Each writes artifacts to `.docs/` (gitignored per-project).
 
-| Agent         | Model  | Purpose                                      | Output                         |
-|---------------|--------|----------------------------------------------|--------------------------------|
-| **researcher**  | haiku  | Finds patterns and conventions in codebase      | `.docs/research.md`           |
-| **planner**     | opus   | Designs implementation plan with execution strategy | `.docs/plan.md`           |
-| **implementer** | sonnet | Writes code following plan + research           | `.docs/implementation-log.md` |
-| **preflighter** | haiku  | Runs build, check, and tests as local CI gate   | `.docs/preflight.md`          |
+| Agent                  | Model  | Purpose                                             | Output                         |
+|------------------------|--------|-----------------------------------------------------|--------------------------------|
+| **researcher**         | haiku  | Finds patterns and conventions in codebase           | `.docs/research.md`           |
+| **planner**            | opus   | Designs implementation plan with execution strategy  | `.docs/plan.md`               |
+| **implementer**        | sonnet | Writes code following plan + research                | `.docs/implementation-log.md` |
+| **preflight-validator**| haiku  | Validates project readiness for preflight checks     | `CLAUDE.md` + `.docs/preflight-validation.md` |
+| **preflighter**        | haiku  | Runs build, check, and tests as local CI gate        | `.docs/preflight.md` (on failure only) |
+
+The **preflight-validator** inspects the project environment (toolchain, tools, dependencies) and writes a `## Preflight` section to the project's `CLAUDE.md`. The **preflighter** reads this section to skip detection and run commands directly. Run the validator once per project setup; the preflighter uses the cached info on every run.
 
 Use individually (`@planner "add auth"`) or as a full pipeline (`/dev-pipeline`).

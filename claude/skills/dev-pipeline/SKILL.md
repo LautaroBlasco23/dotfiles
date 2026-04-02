@@ -35,13 +35,22 @@ Run these phases **sequentially** -- each depends on the previous:
    - After all implementers complete, read their `.docs/implementation-log.md` outputs and present a summary
    - Wait for user confirmation before proceeding
 
-4. **Preflight** -- invoke the `preflighter` agent
+4. **Validate** (conditional) -- invoke the `preflight-validator` agent if needed
+   - Check the project's `CLAUDE.md` for a `## Preflight` section
+   - If the section exists and Status is "ready", skip this step
+   - If the section is missing or Status is "not ready", invoke the validator:
+     - Prompt: "Validate the project environment for preflight readiness. Inspect toolchain, tools, and dependencies."
+   - After completion, read the updated `## Preflight` section and present the results
+   - If Status is "not ready", warn the user about blockers before proceeding
+
+5. **Preflight** -- invoke the `preflighter` agent
    - Prompt: "Run build, check, and tests to verify the implementation. Read .docs/plan.md for testing strategy context."
-   - After completion, read `.docs/preflight.md` and present the full results
+   - If all checks pass, the preflighter reports success directly (no file written)
+   - If any check fails, read `.docs/preflight.md` and present the failure report
 
 ## Skip confirmations
 
-If the user says "full pipeline", "run all", or "no confirmations", skip the confirmation steps between phases and run all 4 sequentially.
+If the user says "full pipeline", "run all", or "no confirmations", skip the confirmation steps between phases and run all 5 sequentially.
 
 ## How to invoke agents
 
@@ -56,6 +65,9 @@ Agent(subagent_type="implementer", prompt="Read .docs/plan.md and .docs/research
 Agent(subagent_type="implementer", prompt="...stream 1 prompt...")
 Agent(subagent_type="implementer", prompt="...stream 2 prompt...")
 
+# Validator (only if no ## Preflight section in CLAUDE.md):
+Agent(subagent_type="preflight-validator", prompt="Validate the project environment for preflight readiness")
+
 Agent(subagent_type="preflighter", prompt="Run build, check, and tests to verify the implementation")
 ```
 
@@ -67,7 +79,9 @@ Before starting the pipeline, verify:
 
 ## After the pipeline
 
-Present the preflight results and ask the user if they want to:
-- Fix any issues found by the preflighter
-- Commit the changes
+If the preflighter reported success (no `.docs/preflight.md` written), confirm all checks passed and ask the user if they want to commit.
+
+If the preflighter reported failures (`.docs/preflight.md` exists), present the failure report and ask the user if they want to:
+- Fix the issues found by the preflighter
+- Commit the changes as-is
 - Run the pipeline again with adjustments
