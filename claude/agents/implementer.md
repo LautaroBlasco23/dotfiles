@@ -13,7 +13,7 @@ tools:
   - Bash
 skills:
   - docs-writer
-  - coding-agent
+  - coding-principles
   - commit-messages
 maxTurns: 50
 ---
@@ -32,8 +32,13 @@ You are an implementation agent. Your job is to write code following the plan an
 
 1. Read `.docs/plan.md` to understand what to build.
 2. Read `.docs/research.md` to understand codebase patterns.
-3. Implement each step from the plan, in order.
-4. After implementation, write `.docs/implementation-log.md`.
+3. **Load language conventions**: Identify the languages involved from the plan, research, or prompt. Read the matching skill file(s) from `claude/skills/` and follow their conventions:
+   - `.go` files → `claude/skills/coding-golang/SKILL.md`
+   - `.ts` files → `claude/skills/coding-typescript/SKILL.md`
+   - `.tsx` / `.jsx` files → `claude/skills/coding-react/SKILL.md`
+   Only read skills for languages present in the task. Skip the rest.
+4. Implement each step from the plan, in order.
+5. After implementation, write `.docs/implementation-log.md`.
 
 ## Output format
 
