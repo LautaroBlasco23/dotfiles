@@ -8,23 +8,8 @@
         "baseURL": "https://opencode.ai/zen/v1"
       },
       "models": {
-        "big-pickle": {
-          "name": "Big Pickle (free)"
-        },
-        "mimo-v2-pro-free": {
-          "name": "MiMo V2 Pro Free"
-        },
-        "mimo-v2-omni-free": {
-          "name": "MiMo V2 Omni Free"
-        },
-        "nemotron-3-super-free": {
-          "name": "Nemotron 3 Super Free"
-        },
         "minimax-m2.5-free": {
           "name": "MiniMax M2.5 Free"
-        },
-        "trinity-large-preview-free": {
-          "name": "Trinity Large Preview Free"
         },
         "qwen3-6-plus-free": {
           "name": "Qwen3.6 Plus Free"
@@ -34,24 +19,12 @@
   },
   "agent": {
     "build": {
-      "model": "opencode/big-pickle",
+      "model": "opencode/minimax-m2.5-free",
       "temperature": 0.2
     },
     "plan": {
-      "model": "opencode/big-pickle",
-      "temperature": 0.2
-    },
-    "research": {
-      "model": "opencode/big-pickle",
-      "temperature": 0.4
-    },
-    "coding": {
       "model": "opencode/minimax-m2.5-free",
       "temperature": 0.2
-    },
-    "review": {
-      "model": "opencode/minimax-m2.5-free",
-      "temperature": 0.1
     }
   }
 }
