@@ -36,13 +36,14 @@ infrastructure/
 
 Available skills are auto-triggered based on task context:
 
+- **agent-injection**: MANDATORY rules for spawning agents — context injection, specificity, task partitioning, token budget. Fires on every agent invocation.
 - **coding-principles**: universal code quality principles — applied to any implementation
 - **coding-golang**: idiomatic Go standards (Fiber, sqlx/pgx, slog, table-driven tests)
 - **coding-typescript**: TypeScript standards (strict mode, Vite, Vitest)
 - **coding-react**: React standards (functional components, hooks, Vite + React)
 - **commit-messages**: Conventional Commits format, atomic commits, no AI metadata
 - **architecture**: system design, project structure, layer boundaries
-- **dev-pipeline**: orchestrates researcher -> planner -> implementer(s) -> preflighter pipeline
+- **dev-pipeline**: full development pipeline (only via "/" slash command)
 - **docs-writer**: shared .docs/ output convention (not auto-triggered, loaded by agents)
 
 Language-specific `coding-*` skills auto-trigger based on file types and project context. They build on top of `coding-principles`.
