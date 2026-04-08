@@ -3,7 +3,7 @@ name: planner
 description: >-
   Explores codebase and produces a structured plan in .docs/plan.md.
   Does NOT write code.
-model: opus
+model: sonnet
 tools:
   - Read
   - Glob
