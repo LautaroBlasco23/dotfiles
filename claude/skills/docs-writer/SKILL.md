@@ -45,6 +45,5 @@ The project's git history preserves code changes independently.
 |---------------------|-----------------------------------|------------------------------|
 | planner             | `.docs/plan.md`                   |                              |
 | researcher          | `.docs/research.md`               |                              |
-| implementer         | `.docs/implementation-log.md`     |                              |
 | preflight-validator | `.docs/preflight-validation.md`   | Also writes `## Preflight` section to project's `CLAUDE.md` |
 | preflighter         | `.docs/preflight.md`              | Only written on failure      |

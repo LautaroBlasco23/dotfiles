@@ -4,7 +4,7 @@ Personal development environment configuration.
 
 Includes:
 
-- Claude workflow configuration (~/.claude)
+- Claude configuration (~/.claude)
 - Neovim configuration (~/.config/nvim)
 - Opencode configuration (~/.config/opencode)
 - Custom terminal commands (see below)
@@ -13,14 +13,14 @@ Includes:
 
 ## Claude Agents
 
-Custom agents for structured development tasks.
+Custom agents for structured development tasks. Invoked manually in the main conversation (e.g., `@planner "add auth"`).
 
 | Agent | Model | Description |
 |---|---|---|
 | `researcher` | Haiku | Explores codebase for patterns and conventions. Produces `.docs/research.md`. |
-| `planner` | Sonnet | Designs implementation plan. Produces `.docs/plan.md`. |
-| `implementer` | Sonnet | Writes code following plan and research. Produces `.docs/implementation-log.md`. |
-| `implementer-jr` | Haiku | Handles mechanical tasks: file deletions, moves, renames, boilerplate. |
+| `planner` | Sonnet | Designs self-contained implementation plan (inlines research context). Produces `.docs/plan.md`. |
+| `implementer` | Sonnet | Writes code following the plan. Returns summary in final message. |
+| `implementer-jr` | Haiku | Handles mechanical tasks: file deletions, moves, renames, boilerplate. Returns summary in final message. |
 | `preflight-validator` | Haiku | Inspects toolchain and dependencies. Writes `## Preflight` to project `CLAUDE.md`. |
 | `preflighter` | Haiku | Runs build, check, and tests as a local CI gate. Writes `.docs/preflight.md` on failure. |
 
@@ -80,16 +80,10 @@ Result:
 
 ## Updating
 
-Pull latest changes via the workflow manager:
+Pull the latest changes from the repo:
 
 ```bash
-claude-workflow
-```
-
-Select **Update dotfiles** from the interactive menu, or run directly:
-
-```bash
-claude-workflow  # interactive TUI
+cd ~/dotfiles && git pull
 ```
 
 Because the configs are symlinked, updates apply automatically.
@@ -102,22 +96,7 @@ Commands added to `~/bin` by the installer:
 
 | Command | Description |
 |---|---|
-| `claude-workflow` | Interactive TUI to manage Claude workflow profiles |
 | `docker-clean` | Prune dangling Docker images and build cache (`--all` to remove all unused images, build cache, and volumes) |
-
-### claude-workflow
-
-Manages Claude Code workflow profiles stored in `~/dotfiles/claude-workflows/`.
-
-```bash
-claude-workflow                   # interactive menu (j/k to navigate)
-claude-workflow list              # list available workflows
-claude-workflow status            # show active workflow (agents & skills)
-claude-workflow switch <name>     # switch to a workflow
-claude-workflow new <name>        # scaffold a new workflow from the active one
-```
-
-The interactive menu shows the active workflow, last pull date, and lets you switch workflows or update dotfiles without typing subcommands.
 
 ---
 
