@@ -11,6 +11,45 @@ Includes:
 
 ---
 
+## Claude Agents
+
+Custom agents for structured development tasks.
+
+| Agent | Model | Description |
+|---|---|---|
+| `researcher` | Haiku | Explores codebase for patterns and conventions. Produces `.docs/research.md`. |
+| `planner` | Sonnet | Designs implementation plan. Produces `.docs/plan.md`. |
+| `implementer` | Sonnet | Writes code following plan and research. Produces `.docs/implementation-log.md`. |
+| `implementer-jr` | Haiku | Handles mechanical tasks: file deletions, moves, renames, boilerplate. |
+| `preflight-validator` | Haiku | Inspects toolchain and dependencies. Writes `## Preflight` to project `CLAUDE.md`. |
+| `preflighter` | Haiku | Runs build, check, and tests as a local CI gate. Writes `.docs/preflight.md` on failure. |
+
+## Claude Skills
+
+Context-injected rules that auto-trigger based on task type.
+
+| Skill | Description |
+|---|---|
+| `agent-injection` | Mandatory rules for spawning agents (context, specificity, token budget). |
+| `architecture` | Guidance on system design and layer boundaries. |
+| `coding-principles` | Core code quality principles applied to any implementation. |
+| `coding-golang` | Idiomatic Go standards (Fiber, sqlx/pgx, slog, table-driven tests). |
+| `coding-typescript` | TypeScript standards (strict mode, Vite, Vitest). |
+| `coding-react` | React standards (functional components, hooks, Vite + React). |
+| `commit-messages` | Conventional Commits format, atomic commits. |
+| `docs-writer` | Shared `.docs/` output convention (loaded by agents, not auto-triggered). |
+
+## Opencode
+
+Uses the **OpenCode Zen (free)** provider with Go provider support.
+
+| Model | ID |
+|---|---|
+| MiniMax M2.5 Free | `opencode/minimax-m2.5-free` |
+| Qwen3.6 Plus Free | `opencode/qwen3-6-plus-free` |
+
+---
+
 ## Installation
 
 Clone the repository:
