@@ -24,6 +24,16 @@ Custom agents for structured development tasks. Invoked manually in the main con
 | `preflight-validator` | Haiku | Inspects toolchain and dependencies. Writes `## Preflight` to project `CLAUDE.md`. |
 | `preflighter` | Haiku | Runs build, check, and tests as a local CI gate. Writes `.docs/preflight.md` on failure. |
 
+## Claude Permissions
+
+Pre-approved tool operations that won't prompt for confirmation. Configured in `~/.claude/settings.json`.
+
+| Scope | Tools |
+|---|---|
+| GitHub MCP (read-only) | `get_*`, `list_*`, `search_*`, `issue_read`, `pull_request_read` |
+
+Write operations (`create_*`, `push_*`, `merge_*`, `delete_*`, comments, etc.) still require confirmation.
+
 ## Claude Skills
 
 Context-injected rules that auto-trigger based on task type.
