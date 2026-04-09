@@ -26,16 +26,6 @@
       }
     }
   },
-  "mcp": {
-    "mercadopago": {
-      "type": "remote",
-      "url": "https://mcp.mercadopago.com/mcp",
-      "oauth": false,
-      "headers": {
-        "Authorization": "Bearer {env:MERCADOPAGO_ACCESS_TOKEN}"
-      }
-    }
-  },
   "agent": {
     "build": {
       "model": "opencode-go/kimi-k2.5",
