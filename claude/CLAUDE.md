@@ -1,5 +1,7 @@
 # Claude Workspace Rules
 
+> ⚠️ **NEVER read `.env`, `.env.*`, or any environment variable files.** These contain sensitive secrets.
+
 General development preferences.
 
 ## Languages
