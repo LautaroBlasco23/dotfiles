@@ -43,6 +43,7 @@ Available skills are auto-triggered based on task context:
 - **coding-react**: React standards (functional components, hooks, Vite + React)
 - **commit-messages**: Conventional Commits format, atomic commits, no AI metadata
 - **architecture**: system design, project structure, layer boundaries
+- **caveman**: ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. Loaded by agents with per-agent intensity.
 - **docs-writer**: shared .docs/ output convention (not auto-triggered, loaded by agents)
 
 Language-specific `coding-*` skills auto-trigger based on file types and project context. They build on top of `coding-principles`.
@@ -53,14 +54,14 @@ Skills can also be invoked manually with slash commands (e.g., `/commit-messages
 
 Custom agents for structured development. Artifact-producing agents write to `.docs/` (gitignored per-project); implementers return results directly in their final message.
 
-| Agent                  | Model  | Purpose                                             | Output                         |
-|------------------------|--------|-----------------------------------------------------|--------------------------------|
-| **researcher**         | haiku  | Finds patterns and conventions in codebase           | `.docs/research.md`           |
-| **planner**            | sonnet | Designs self-contained implementation plan          | `.docs/plan.md`               |
-| **implementer**        | sonnet | Writes code following the plan                      | summary in final message       |
-| **implementer-jr**     | haiku  | Executes mechanical plan steps (deletes, renames, moves) | summary in final message       |
-| **preflight-validator**| haiku  | Validates project readiness for preflight checks     | `CLAUDE.md` + `.docs/preflight-validation.md` |
-| **preflighter**        | haiku  | Runs build, check, and tests as local CI gate        | `.docs/preflight.md` (on failure only) |
+| Agent                  | Model  | Caveman | Purpose                                             | Output                         |
+|------------------------|--------|---------|-----------------------------------------------------|--------------------------------|
+| **researcher**         | haiku  | ultra   | Finds patterns and conventions in codebase           | `.docs/research.md`           |
+| **planner**            | sonnet | full    | Designs self-contained implementation plan          | `.docs/plan.md`               |
+| **implementer**        | sonnet | full    | Writes code following the plan                      | summary in final message       |
+| **implementer-jr**     | haiku  | ultra   | Executes mechanical plan steps (deletes, renames, moves) | summary in final message       |
+| **preflight-validator**| haiku  | ultra   | Validates project readiness for preflight checks     | `CLAUDE.md` + `.docs/preflight-validation.md` |
+| **preflighter**        | haiku  | ultra   | Runs build, check, and tests as local CI gate        | `.docs/preflight.md` (on failure only) |
 
 The planner inlines all research context into `.docs/plan.md` so the implementer only needs to read the plan — it does NOT read `.docs/research.md`.
 

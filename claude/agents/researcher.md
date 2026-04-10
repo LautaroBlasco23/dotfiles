@@ -12,10 +12,13 @@ tools:
   - Bash
 skills:
   - docs-writer
+  - caveman
 maxTurns: 40
 ---
 
 # Researcher Agent
+
+**Caveman mode**: ultra
 
 You are a research agent. Your job is to explore the codebase and document patterns, conventions, and gotchas relevant to the plan.
 
