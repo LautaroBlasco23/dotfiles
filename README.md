@@ -2,12 +2,21 @@
 
 Personal development environment configuration.
 
-Includes:
+Currently using Claude Code and Opencode for writing code.
 
-- Claude configuration (~/.claude)
-- Neovim configuration (~/.config/nvim)
-- Opencode configuration (~/.config/opencode)
-- Custom terminal commands (see below)
+---
+
+Uses **symlink-based linking** — configs live in this repo and are linked to their expected locations. This means updates apply instantly after `git pull`.
+
+Linked configs:
+
+| Repo Path | Linked To |
+|---|---|
+| `claude/` | `~/.claude` |
+| `nvim/` | `~/.config/nvim` |
+| `opencode/` | `~/.config/opencode` |
+
+Scripts in `scripts/` (except `init.sh`) are linked to `~/bin/` and made available in your `$PATH`.
 
 ---
 
@@ -47,16 +56,41 @@ Context-injected rules that auto-trigger based on task type.
 | `coding-typescript` | TypeScript standards (strict mode, Vite, Vitest). |
 | `coding-react` | React standards (functional components, hooks, Vite + React). |
 | `commit-messages` | Conventional Commits format, atomic commits. |
+| `caveman` | Ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. |
 | `docs-writer` | Shared `.docs/` output convention (loaded by agents, not auto-triggered). |
 
-## Opencode
+---
 
-Uses the **OpenCode Zen (free)** provider with Go provider support.
+## OpenCode
 
-| Model | ID |
-|---|---|
-| MiniMax M2.5 Free | `opencode/minimax-m2.5-free` |
-| Qwen3.6 Plus Free | `opencode/qwen3-6-plus-free` |
+### Providers
+
+| Provider | Name | Base URL |
+|---|---|---|
+| `opencode-go` | OpenCode Go | `https://opencode.ai/zen/go/v1` |
+| `opencode` | OpenCode Zen (free) | `https://opencode.ai/zen/v1` |
+
+### Models
+
+| Model | Provider | ID |
+|---|---|---|
+| Kimi K2.5 | OpenCode Go | `opencode-go/kimi-k2.5` |
+| MiniMax M2.5 Free | OpenCode Zen | `opencode/minimax-m2.5-free` |
+
+### Agents
+
+Agents are invoked manually in the main conversation (e.g., `@planner "add auth"`).
+
+| Agent | Model | Description |
+|---|---|---|
+| `build` | Kimi K2.5 | Runs build operations for the project. |
+| `plan` | Kimi K2.5 | Creates implementation plans for tasks. |
+| `researcher` | MiniMax M2.5 Free | Explores codebase for patterns and conventions. Produces `.docs/research.md`. |
+| `planner` | Kimi K2.5 | Designs self-contained implementation plan. Produces `.docs/plan.md`. |
+| `implementer` | Kimi K2.5 | Writes code following the plan. Returns summary in final message. |
+| `implementer-jr` | MiniMax M2.5 Free | Handles mechanical tasks: file deletions, moves, renames, boilerplate. |
+| `preflight-validator` | MiniMax M2.5 Free | Validates project readiness. Writes Preflight section to CLAUDE.md. |
+| `preflighter` | MiniMax M2.5 Free | Runs build, check, and tests as a local CI gate. Writes `.docs/preflight.md` on failure. |
 
 ---
 
@@ -82,9 +116,11 @@ The installer will:
 
 Result:
 
-~/.claude        -> ~/dotfiles/claude
-~/.config/nvim   -> ~/dotfiles/nvim
-~/.config/opencode -> ~/dotfiles/opencode
+```
+~/.claude           -> ~/dotfiles/claude
+~/.config/nvim      -> ~/dotfiles/nvim
+~/.config/opencode  -> ~/dotfiles/opencode
+```
 
 ---
 
