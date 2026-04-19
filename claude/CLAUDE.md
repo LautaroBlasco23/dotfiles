@@ -45,6 +45,9 @@ Available skills are auto-triggered based on task context:
 - **coding-react**: React standards (functional components, hooks, Vite + React)
 - **commit-messages**: Conventional Commits format, atomic commits, no AI metadata
 - **architecture**: system design, project structure, layer boundaries
+- **testing**: user-oriented unit tests with self-documenting file/test comments (auto-trigger; unit only)
+- **testing-integration**: integration tests against real infra (DB/HTTP/broker) — manual only via `/testing-integration`
+- **testing-e2e**: end-to-end user-journey tests against a running stack — manual only via `/testing-e2e`
 - **caveman**: ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. Loaded by agents with per-agent intensity.
 - **docs-writer**: shared .docs/ output convention (not auto-triggered, loaded by agents)
 
