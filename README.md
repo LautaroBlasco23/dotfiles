@@ -74,7 +74,7 @@ Context-injected rules that auto-trigger based on task type.
 
 | Model | Provider | ID |
 |---|---|---|
-| Kimi K2.5 | OpenCode Go | `opencode-go/kimi-k2.5` |
+| Kimi K2.6 | OpenCode Go | `opencode-go/kimi-k2.5` |
 | MiniMax M2.5 Free | OpenCode Zen | `opencode/minimax-m2.5-free` |
 
 ### Agents
@@ -83,11 +83,11 @@ Agents are invoked manually in the main conversation (e.g., `@planner "add auth"
 
 | Agent | Model | Description |
 |---|---|---|
-| `build` | Kimi K2.5 | Runs build operations for the project. |
-| `plan` | Kimi K2.5 | Creates implementation plans for tasks. |
+| `build` | Kimi K2.6 | Runs build operations for the project. |
+| `plan` | Kimi K2.6 | Creates implementation plans for tasks. |
 | `researcher` | MiniMax M2.5 Free | Explores codebase for patterns and conventions. Produces `.docs/research.md`. |
-| `planner` | Kimi K2.5 | Designs self-contained implementation plan. Produces `.docs/plan.md`. |
-| `implementer` | Kimi K2.5 | Writes code following the plan. Returns summary in final message. |
+| `planner` | Kimi K2.6 | Designs self-contained implementation plan. Produces `.docs/plan.md`. |
+| `implementer` | Kimi K2.6 | Writes code following the plan. Returns summary in final message. |
 | `implementer-jr` | MiniMax M2.5 Free | Handles mechanical tasks: file deletions, moves, renames, boilerplate. |
 | `preflight-validator` | MiniMax M2.5 Free | Validates project readiness. Writes Preflight section to CLAUDE.md. |
 | `preflighter` | MiniMax M2.5 Free | Runs build, check, and tests as a local CI gate. Writes `.docs/preflight.md` on failure. |
