@@ -8,8 +8,8 @@
         "baseURL": "https://opencode.ai/zen/go/v1"
       },
       "models": {
-        "kimi-k2.5": {
-          "name": "Kimi K2.6"
+        "kimi-k2.6": {
+          "name": "Kimi K2.6 (3x limits)"
         }
       }
     },
@@ -28,11 +28,11 @@
   },
   "agent": {
     "build": {
-      "model": "opencode-go/kimi-k2.5",
+      "model": "opencode-go/kimi-k2.6",
       "temperature": 0.2
     },
     "plan": {
-      "model": "opencode-go/kimi-k2.5",
+      "model": "opencode-go/kimi-k2.6",
       "temperature": 0.2
     },
     "researcher": {
@@ -62,7 +62,7 @@
     "planner": {
       "description": "Explores codebase and produces a structured plan in .docs/plan.md. Does NOT write code.",
       "mode": "subagent",
-      "model": "opencode-go/kimi-k2.5",
+      "model": "opencode-go/kimi-k2.6",
       "temperature": 0.2,
       "steps": 30,
       "permission": {
@@ -84,7 +84,7 @@
     "implementer": {
       "description": "Implements code changes following the plan. Does NOT commit.",
       "mode": "subagent",
-      "model": "opencode-go/kimi-k2.5",
+      "model": "opencode-go/kimi-k2.6",
       "temperature": 0.2,
       "steps": 50,
       "prompt": "You are an implementation agent. Your job is to write code following the plan.\n\n## Constraints\n\n- **Do NOT commit**: Write code but do not run `git commit`.\n- **Follow the plan**: Implement what `.docs/plan.md` specifies. The plan is self-contained — do NOT read `.docs/research.md`.\n\n## Process\n\n1. Read `.docs/plan.md` to understand what to build. It contains all the codebase context, patterns, and file references you need.\n2. **Load language conventions**: Identify the languages involved from the plan or prompt. Read the matching skill file(s) from `claude/skills/` and follow their conventions:\n   - `.go` files → `claude/skills/coding-golang/SKILL.md`\n   - `.ts` files → `claude/skills/coding-typescript/SKILL.md`\n   - `.tsx` / `.jsx` files → `claude/skills/coding-react/SKILL.md`\n   Only read skills for languages present in the task. Skip the rest.\n3. Implement each step from the plan, in order.\n\n## Final message\n\nWhen done, return a concise summary to the main conversation covering:\n\n- **Changes made**: files created/modified with a brief description.\n- **Deviations from plan**: any places where you deviated and why.\n- **Not implemented**: any planned steps that were skipped and why.\n- **Next steps**: remaining work that needs manual follow-up.\n\nDo NOT write this to a file — return it as your final message.\n\n## Guidelines\n\n- Follow existing codebase patterns as documented in the plan.\n- Keep changes minimal and focused on the plan.\n- If a step is unclear, implement the simplest reasonable interpretation.\n- Run tests or linters if the project has them configured."
