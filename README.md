@@ -74,23 +74,47 @@ Context-injected rules that auto-trigger based on task type.
 
 | Model | Provider | ID |
 |---|---|---|
-| Kimi K2.6 | OpenCode Go | `opencode-go/kimi-k2.5` |
+| GLM-5.1 | OpenCode Go | `opencode-go/glm-5.1` |
+| GLM-5 | OpenCode Go | `opencode-go/glm-5` |
+| Kimi K2.5 | OpenCode Go | `opencode-go/kimi-k2.5` |
+| Kimi K2.6 | OpenCode Go | `opencode-go/kimi-k2.6` |
+| DeepSeek V4 Pro | OpenCode Go | `opencode-go/deepseek-v4-pro` |
+| DeepSeek V4 Flash | OpenCode Go | `opencode-go/deepseek-v4-flash` |
+| MiMo-V2-Pro | OpenCode Go | `opencode-go/mimo-v2-pro` |
+| MiMo-V2-Omni | OpenCode Go | `opencode-go/mimo-v2-omni` |
+| MiMo-V2.5-Pro | OpenCode Go | `opencode-go/mimo-v2.5-pro` |
+| MiMo-V2.5 | OpenCode Go | `opencode-go/mimo-v2.5` |
+| MiniMax M2.7 | OpenCode Go | `opencode-go/minimax-m2.7` |
+| MiniMax M2.5 | OpenCode Go | `opencode-go/minimax-m2.5` |
+| Qwen3.6 Plus | OpenCode Go | `opencode-go/qwen3.6-plus` |
+| Qwen3.5 Plus | OpenCode Go | `opencode-go/qwen3.5-plus` |
 | MiniMax M2.5 Free | OpenCode Zen | `opencode/minimax-m2.5-free` |
 
 ### Agents
 
 Agents are invoked manually in the main conversation (e.g., `@planner "add auth"`).
 
+#### Main Agents
+
 | Agent | Model | Description |
 |---|---|---|
-| `build` | Kimi K2.6 | Runs build operations for the project. |
-| `plan` | Kimi K2.6 | Creates implementation plans for tasks. |
-| `researcher` | MiniMax M2.5 Free | Explores codebase for patterns and conventions. Produces `.docs/research.md`. |
-| `planner` | Kimi K2.6 | Designs self-contained implementation plan. Produces `.docs/plan.md`. |
-| `implementer` | Kimi K2.6 | Writes code following the plan. Returns summary in final message. |
-| `implementer-jr` | MiniMax M2.5 Free | Handles mechanical tasks: file deletions, moves, renames, boilerplate. |
-| `preflight-validator` | MiniMax M2.5 Free | Validates project readiness. Writes Preflight section to CLAUDE.md. |
-| `preflighter` | MiniMax M2.5 Free | Runs build, check, and tests as a local CI gate. Writes `.docs/preflight.md` on failure. |
+| `build` | DeepSeek V4 Pro | **Default build** — runs build operations for the project. |
+| `build-kimi` | Kimi K2.6 | Build with long-context strength (previous default). |
+| `build-qwen` | Qwen3.6 Plus | Build with strong instruction-following and structure. |
+| `plan` | Qwen3.6 Plus | **Default plan** — creates implementation plans for tasks. |
+| `plan-deepseek` | DeepSeek V4 Pro | Plan for deep reasoning and complex architecture. |
+| `plan-kimi` | Kimi K2.6 | Plan for very large codebases needing huge context. |
+
+#### Subagents
+
+| Agent | Model | Description |
+|---|---|---|
+| `planner` | DeepSeek V4 Pro | Designs self-contained implementation plan. Produces `.docs/plan.md`. |
+| `implementer` | DeepSeek V4 Pro | Writes code following the plan. Returns summary in final message. |
+| `researcher` | Kimi K2.5 | Deep codebase auditor. Explores patterns and conventions. Produces `.docs/research.md`. |
+| `implementer-jr` | DeepSeek V4 Flash | Handles mechanical tasks: file deletions, moves, renames, boilerplate. |
+| `preflight-validator` | DeepSeek V4 Flash | Validates project readiness. Writes Preflight section to CLAUDE.md. |
+| `preflighter` | DeepSeek V4 Flash | Runs build, check, and tests as a local CI gate. Writes `.docs/preflight.md` on failure. |
 
 ---
 
