@@ -2,23 +2,18 @@
 name: docs-writer
 slug: docs-writer
 description: >-
-  Shared convention for writing artifacts to .docs/ directory.
-  NOT auto-triggered. Loaded via agent skills field only.
+  Convention for writing pipeline artifacts to .docs/ directory.
+  TRIGGER when: writing researcher, planner, preflighter, or preflight-validator output.
 ---
 
-# Docs Writer Convention
+## Convention
 
-All pipeline agents write their output to a `.docs/` directory in the project root.
+All pipeline skill outputs write to `.docs/` in the project root.
 
-## Directory
-
-- Location: `<project-root>/.docs/`
-- Create it if it doesn't exist
-
-## Gitignore check
+## Setup check
 
 Before writing, verify `.docs/` is listed in the project's `.gitignore`.
-If it is NOT, warn the user and ask them to add it before proceeding.
+If not: warn the user and ask them to add it.
 
 ## File format
 
@@ -27,8 +22,8 @@ Every `.docs/` file uses markdown with YAML frontmatter:
 ```markdown
 ---
 date: YYYY-MM-DD
-agent: <agent-name>
-task: <one-line description of the user's request>
+agent: <skill-name>
+task: <one-line description>
 ---
 
 <content>
@@ -36,14 +31,13 @@ task: <one-line description of the user's request>
 
 ## Overwrite semantics
 
-Each run overwrites the previous file. No versioning -- keep it simple.
-The project's git history preserves code changes independently.
+Each run overwrites the previous file. No versioning — git history preserves code changes.
 
 ## Output files
 
-| Agent               | File                              | Notes                        |
-|---------------------|-----------------------------------|------------------------------|
-| planner             | `.docs/plan.md`                   |                              |
-| researcher          | `.docs/research.md`               |                              |
-| preflight-validator | `.docs/preflight-validation.md`   | Also writes `## Preflight` section to project's `CLAUDE.md` |
-| preflighter         | `.docs/preflight.md`              | Only written on failure      |
+| Skill               | File                            | Notes                                        |
+|---------------------|---------------------------------|----------------------------------------------|
+| researcher          | `.docs/research.md`             |                                              |
+| planner             | `.docs/plan.md`                 |                                              |
+| preflight-validator | `.docs/preflight-validation.md` | Also writes `## Preflight` to `CLAUDE.md`    |
+| preflighter         | `.docs/preflight.md`            | Only written on failure                      |

@@ -39,37 +39,30 @@ infrastructure/
 Available skills are auto-triggered based on task context:
 
 - **agent-injection**: MANDATORY rules for spawning agents — context injection, specificity, task partitioning, token budget. Fires on every agent invocation.
-- **coding-principles**: universal code quality principles — applied to any implementation
-- **coding-golang**: idiomatic Go standards (Fiber, sqlx/pgx, slog, table-driven tests)
-- **coding-typescript**: TypeScript standards (strict mode, Vite, Vitest)
-- **coding-react**: React standards (functional components, hooks, Vite + React)
-- **commit-messages**: Conventional Commits format, atomic commits, no AI metadata
+- **coding-principles**: universal code quality principles, language-agnostic. Also loaded by `implementer`.
+- **commit**: Conventional Commits format, atomic commits, no AI metadata
 - **architecture**: system design, project structure, layer boundaries
-- **testing**: user-oriented unit tests with self-documenting file/test comments (auto-trigger; unit only)
-- **testing-integration**: integration tests against real infra (DB/HTTP/broker) — manual only via `/testing-integration`
-- **testing-e2e**: end-to-end user-journey tests against a running stack — manual only via `/testing-e2e`
-- **caveman**: ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. Loaded by agents with per-agent intensity.
-- **docs-writer**: shared .docs/ output convention (not auto-triggered, loaded by agents)
+- **caveman**: ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra.
+- **docs-writer**: `.docs/` output convention for pipeline skills
+- **test-analysis**: audits test coverage for a module — gaps, partial coverage, quality issues
+- **test-creation**: creates/improves tests; args: `<test-types> for <module>` (e.g., `unit tests for auth module`)
 
-Language-specific `coding-*` skills auto-trigger based on file types and project context. They build on top of `coding-principles`.
+Skills can also be invoked manually with slash commands (e.g., `/commit`, `/test-creation unit tests for payments/`).
 
-Skills can also be invoked manually with slash commands (e.g., `/commit-messages`).
+### Pipeline skills
 
-## Agents
+Invoke by tagging (e.g., `@researcher "find auth patterns"`):
 
-Custom agents for structured development. Artifact-producing agents write to `.docs/` (gitignored per-project); implementers return results directly in their final message.
+| Skill                  | Purpose                                                   | Output                                                      |
+|------------------------|-----------------------------------------------------------|-------------------------------------------------------------|
+| **researcher**         | Finds patterns and conventions in codebase                | `.docs/research.md`                                         |
+| **planner**            | Designs self-contained implementation plan                | `.docs/plan.md`                                             |
+| **implementer**        | Writes code following `.docs/plan.md`                     | summary in response                                         |
+| **implementer-jr**     | Executes mechanical steps (deletes, renames, moves)       | summary in response                                         |
+| **preflight-validator**| Validates project toolchain readiness                     | `CLAUDE.md` Preflight + `.docs/preflight-validation.md`     |
+| **preflighter**        | Runs build/check/test as local CI gate                    | `.docs/preflight.md` on failure only                        |
 
-| Agent                  | Model  | Caveman | Purpose                                             | Output                         |
-|------------------------|--------|---------|-----------------------------------------------------|--------------------------------|
-| **researcher**         | haiku  | ultra   | Finds patterns and conventions in codebase           | `.docs/research.md`           |
-| **planner**            | sonnet | full    | Designs self-contained implementation plan          | `.docs/plan.md`               |
-| **implementer**        | sonnet | full    | Writes code following the plan                      | summary in final message       |
-| **implementer-jr**     | haiku  | ultra   | Executes mechanical plan steps (deletes, renames, moves) | summary in final message       |
-| **preflight-validator**| haiku  | ultra   | Validates project readiness for preflight checks     | `CLAUDE.md` + `.docs/preflight-validation.md` |
-| **preflighter**        | haiku  | ultra   | Runs build, check, and tests as local CI gate        | `.docs/preflight.md` (on failure only) |
+Workflow: `@researcher` → `@planner` → `@implementer` (or `@implementer-jr` for mechanical steps).
 
-The planner inlines all research context into `.docs/plan.md` so the implementer only needs to read the plan — it does NOT read `.docs/research.md`.
-
-The **preflight-validator** inspects the project environment (toolchain, tools, dependencies) and writes a `## Preflight` section to the project's `CLAUDE.md`. The **preflighter** reads this section to skip detection and run commands directly. Run the validator once per project setup; the preflighter uses the cached info on every run.
-
-Use individually by tagging (e.g., `@planner "add auth"`).
+The planner inlines all research into `.docs/plan.md` — implementer reads ONLY the plan, never `.docs/research.md`.
+Run `@preflight-validator` once per project setup; `@preflighter` uses the cached `## Preflight` section on every run.
