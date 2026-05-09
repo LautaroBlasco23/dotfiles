@@ -57,7 +57,23 @@ ensure_path() {
 setup_links() {
   echo "== Linking configs =="
 
-  link "$REPO_DIR/claude" "$HOME/.claude"
+  # Migrate from old whole-directory ~/.claude symlink to per-file links
+  if [ -L "$HOME/.claude" ] && [ "$(readlink "$HOME/.claude")" = "$REPO_DIR/claude" ]; then
+    echo "Removing old ~/.claude symlink (migrating to per-file links)"
+    rm "$HOME/.claude"
+  fi
+
+  mkdir -p "$HOME/.claude"
+  mkdir -p "$HOME/.opencode"
+
+  link "$REPO_DIR/skills" "$HOME/.claude/skills"
+  link "$REPO_DIR/skills" "$HOME/.opencode/skills"
+
+  link "$REPO_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+  link "$REPO_DIR/claude/scripts" "$HOME/.claude/scripts"
+  link "$REPO_DIR/claude/settings.json" "$HOME/.claude/settings.json"
+  link "$REPO_DIR/claude/settings.local.json" "$HOME/.claude/settings.local.json"
+
   link "$REPO_DIR/nvim" "$CONFIG_DIR/nvim"
   link "$REPO_DIR/opencode" "$CONFIG_DIR/opencode"
 }
