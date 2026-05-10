@@ -11,14 +11,42 @@ return {
         build = "make",
         cond = function() return vim.fn.executable("make") == 1 end,
       },
+      { "nvim-telescope/telescope-live-grep-args.nvim" },
     },
     keys = {
       { "<leader><space>", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Switch buffer" },
       { "<leader>/", "<cmd>Telescope live_grep<cr>", desc = "Grep (root dir)" },
       { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
       { "<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command history" },
-      { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "Find files" },
-      { "<leader>fF", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find files (hidden)" },
+      {
+        "<leader>ff",
+        function()
+          require("telescope.builtin").find_files({
+            hidden = true,
+            no_ignore = true,
+          })
+        end,
+        desc = "Find files",
+      },
+      {
+        "<leader>fe",
+        function()
+          require("telescope.builtin").find_files({
+            find_command = { "fd", "--hidden", "--no-ignore", ".env" },
+          })
+        end,
+        desc = "Find env files",
+      },
+      {
+        "<leader>fF",
+        function()
+          require("telescope.builtin").find_files({
+            hidden = true,
+            no_ignore = true,
+          })
+        end,
+        desc = "Find files (all)",
+      },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent files" },
       { "<leader>fg", "<cmd>Telescope git_files<cr>", desc = "Find git files" },
       { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Git commits" },
@@ -35,27 +63,71 @@ return {
       { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
       { "<leader>sS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
       { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "Word under cursor" },
-    },
-    opts = {
-      defaults = {
-        prompt_prefix = " ",
-        selection_caret = " ",
-        sorting_strategy = "ascending",
-        layout_config = {
-          horizontal = { prompt_position = "top", preview_width = 0.55 },
-        },
-        mappings = {
-          i = {
-            ["<C-j>"] = "move_selection_next",
-            ["<C-k>"] = "move_selection_previous",
-            ["<esc>"] = "close",
-          },
-        },
+      { "<leader>sr", "<cmd>Telescope resume<cr>", desc = "Resume last search" },
+      {
+        "<leader>fC",
+        function()
+          require("telescope.builtin").find_files({ cwd = vim.fn.expand("%:p:h") })
+        end,
+        desc = "Find files (current dir)",
+      },
+      {
+        "<leader>sG",
+        function()
+          require("telescope").extensions.live_grep_args.live_grep_args()
+        end,
+        desc = "Live grep (with args)",
       },
     },
+    opts = function()
+      local actions = require("telescope.actions")
+      local lga_actions = require("telescope-live-grep-args.actions")
+      return {
+        defaults = {
+          prompt_prefix = " ",
+          selection_caret = " ",
+          sorting_strategy = "ascending",
+          layout_config = {
+            horizontal = { prompt_position = "top", preview_width = 0.55 },
+          },
+          mappings = {
+            i = {
+              ["<C-j>"] = actions.move_selection_next,
+              ["<C-k>"] = actions.move_selection_previous,
+              ["<esc>"] = actions.close,
+              ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+              ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["<C-s>"] = actions.select_horizontal,
+              ["<C-v>"] = actions.select_vertical,
+              ["<C-t>"] = actions.select_tab,
+              ["<C-u>"] = actions.preview_scrolling_up,
+              ["<C-d>"] = actions.preview_scrolling_down,
+            },
+            n = {
+              ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
+              ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["q"] = actions.close,
+            },
+          },
+        },
+        extensions = {
+          live_grep_args = {
+            auto_quoting = true,
+            mappings = {
+              i = {
+                ["<C-k>"] = lga_actions.quote_prompt(),
+                ["<C-g>"] = lga_actions.quote_prompt({ postfix = " -g " }),
+              },
+            },
+          },
+        },
+      }
+    end,
     config = function(_, opts)
-      require("telescope").setup(opts)
-      pcall(require("telescope").load_extension, "fzf")
+      local telescope = require("telescope")
+      telescope.setup(opts)
+      pcall(telescope.load_extension, "fzf")
+      pcall(telescope.load_extension, "live_grep_args")
     end,
   },
 
