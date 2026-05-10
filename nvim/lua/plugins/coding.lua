@@ -78,13 +78,17 @@ return {
   -- Treesitter - better syntax highlighting
   {
     "nvim-treesitter/nvim-treesitter",
+    commit = "42fc28ba918343ebfd5565147a42a26580579482",
     lazy = false,
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter").setup()
+      require("nvim-treesitter.configs").setup({
+        highlight = { enable = true },
+        indent = { enable = true },
+        ensure_installed = { "bash", "regex" },
+      })
     end,
   },
-
   -- Comments
   {
     "folke/ts-comments.nvim",
