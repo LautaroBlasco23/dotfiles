@@ -79,3 +79,13 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Enter normal mode" })
 map({ "n", "v" }, "<leader>cf", function()
   require("conform").format({ async = true, lsp_fallback = true })
 end, { desc = "Format" })
+
+-- Search for visual selection with Telescope
+map("v", "//", function()
+  local saved_reg = vim.fn.getreg('"')
+  local saved_regtype = vim.fn.getregtype('"')
+  vim.cmd([[noautocmd normal! "vy]])
+  local text = vim.fn.getreg('"')
+  vim.fn.setreg('"', saved_reg, saved_regtype)
+  require("telescope.builtin").live_grep({ default_text = text })
+end, { desc = "Grep visual selection" })
