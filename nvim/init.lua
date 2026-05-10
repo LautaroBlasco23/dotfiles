@@ -1,5 +1,7 @@
 vim.cmd("filetype plugin indent on")
 
+vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/site")
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -53,5 +55,8 @@ require('lazy').setup {
   },
   ui = {
     border = 'rounded',
+  },
+  rocks = {
+    enabled = false,
   },
 }
