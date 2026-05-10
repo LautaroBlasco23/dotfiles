@@ -117,69 +117,181 @@ These tools are used by the formatter integration and may be required by plugins
 
 `<leader>` is mapped to `Space`.
 
-### Files & Search
-| Keymap | Action |
-|--------|--------|
-| `<leader>ff` | Find files |
-| `<leader>sg` | Live grep (search text across project) |
-| `<leader>sw` | Search word under cursor |
-| `<leader>fr` | Recent files |
-| `<leader>sb` | Fuzzy search in current buffer |
-| `<leader>sk` | Search keymaps |
-| `<leader>sh` | Search help pages |
-| `<leader>e` | Toggle file explorer |
-| `<leader>E` | Toggle file explorer (current file dir) |
+### Movement & Editing
 
-### Buffers & Windows
-| Keymap | Action |
-|--------|--------|
-| `<S-h>` / `<S-l>` | Previous / next buffer |
+| Key | Mode | What it does |
+|-----|------|--------------|
+| `j` / `k` | n, x | Move down/up, but respect wrapped lines |
+| `n` / `N` | n | Next / previous search result (always goes forward/backward regardless of `/` or `?`) |
+| `<Esc>` | n | Clear search highlight |
+| `<A-j>` / `<A-k>` | n, i, v | Move current line(s) down / up |
+| `<` / `>` | v | Indent selection (keeps selection) |
+| `p` | x | Paste without overwriting the default register |
+| `<C-s>` | i, x, n, s | Save file |
+
+### Buffers & Tabs
+
+| Key | What it does |
+|-----|--------------|
+| `<S-h>` / `<S-l>` or `[b` / `]b` | Previous / next buffer |
 | `<leader>bd` | Delete current buffer |
-| `<C-h/j/k/l>` | Navigate between windows |
-| `<leader>w-` | Split window below |
-| `<leader>w\|` | Split window right |
+| `<leader>bD` | Delete **all** buffers |
+| `<leader>bp` | Toggle pin (bufferline) |
+| `<leader>bo` | Close all other buffers |
+| `<leader>br` / `<leader>bl` | Close buffers to the right / left |
+| `<leader><tab>[` / `<leader><tab>]` | Previous / next tab |
+| `<leader><tab><tab>` | New tab |
+| `<leader><tab>d` | Close tab |
+
+### Windows & Splits
+
+| Key | What it does |
+|-----|--------------|
+| `<C-h>` / `<C-j>` / `<C-k>` / `<C-l>` | Navigate to left/lower/upper/right window |
+| `<C-Up>` / `<C-Down>` / `<C-Left>` / `<C-Right>` | Resize window |
 | `<leader>wd` | Close window |
+| `<leader>w-` or `<leader>-` | Split horizontally |
+| `<leader>w\|` or `<leader>\|` | Split vertically |
+| `<leader>ww` | Go to previous window |
+
+### Search (Telescope)
+
+| Key | What it does |
+|-----|--------------|
+| `<leader><space>` | Switch buffer |
+| `<leader>/` or `<leader>sg` | Live grep (root dir) |
+| `<leader>sG` | Live grep with args (lets you pass raw `rg` flags) |
+| `<leader>ff` | Find files (includes hidden & ignored) |
+| `<leader>fF` | Find files (all) |
+| `<leader>fr` | Recent files |
+| `<leader>fg` | Git files |
+| `<leader>fC` | Find files in current file’s directory |
+| `<leader>sw` | Grep word under cursor |
+| `<leader>sb` | Fuzzy find in current buffer |
+| `<leader>sd` / `<leader>sD` | Document / workspace diagnostics |
+| `<leader>ss` / `<leader>sS` | Document / workspace symbols |
+| `<leader>sh` | Help tags |
+| `<leader>sk` | Keymaps |
+| `<leader>sm` | Marks |
+| `<leader>sr` | Resume last search |
+| `<leader>:` | Command history |
+| `<leader>st` | Todo comments |
+
+**Inside any Telescope prompt (insert mode):**
+
+| Key | What it does |
+|-----|--------------|
+| `<C-j>` | Move to next result |
+| `<C-p>` | Move to previous result |
+| `<CR>` | Open selected file |
+| `<C-s>` | Open in horizontal split |
+| `<C-v>` | Open in vertical split |
+| `<C-t>` | Open in new tab |
+| `<C-q>` | Send results to quickfix list |
+| `<M-q>` | Send selected to quickfix |
+| `<C-u>` / `<C-d>` | Scroll preview up / down |
+| `<Esc>` | Close telescope |
+
+**Inside `<leader>sG` specifically** (telescope-live-grep-args):
+- `<C-k>` → Quote the prompt
+- `<C-g>` → Quote prompt and append ` -g ` (for file globbing)
 
 ### LSP
-| Keymap | Action |
-|--------|--------|
-| `gd` | Go to definition |
-| `gr` | Go to references |
+
+| Key | What it does |
+|-----|--------------|
+| `gd` | Go to definition (telescope) |
+| `gD` | Go to declaration |
+| `gr` | Find references (telescope) |
 | `gI` | Go to implementation |
+| `gy` | Go to type definition |
 | `K` | Hover documentation |
 | `gK` | Signature help |
-| `<leader>cr` | Rename symbol |
+| `<leader>cr` | Rename |
 | `<leader>ca` | Code action |
-| `<leader>cf` | Format buffer |
+| `<leader>uh` | Toggle inlay hints |
 | `]d` / `[d` | Next / previous diagnostic |
-| `<leader>cd` | Show line diagnostics |
+| `]e` / `[e` | Next / previous error |
+| `<leader>cd` | Show line diagnostic |
+| `<leader>cf` | Format buffer / selection |
 
 ### Git
-| Keymap | Action |
-|--------|--------|
-| `<leader>gg` | Open Lazygit |
-| `<leader>gb` | Git browse (open in browser) |
-| `<leader>gB` | Git blame current line |
+
+| Key | What it does |
+|-----|--------------|
+| `<leader>gg` | Open lazygit |
+| `<leader>gf` | Lazygit log for current file |
+| `<leader>gl` | Lazygit log |
+| `<leader>gb` | Git browse |
+| `<leader>gB` | Git blame line |
+| `<leader>gc` | Git commits (telescope) |
+| `<leader>gs` | Git status (telescope) |
+| `<leader>ge` | Git explorer (neo-tree) |
 | `]h` / `[h` | Next / previous hunk |
 | `<leader>ghs` | Stage hunk |
 | `<leader>ghr` | Reset hunk |
 | `<leader>ghp` | Preview hunk inline |
+| `<leader>ghb` | Blame line |
+| `<leader>ghd` | Diff this |
 
-### Navigation
-| Keymap | Action |
-|--------|--------|
-| `s` | Flash jump (type chars to jump) |
-| `S` | Flash treesitter jump |
-| `]]` / `[[` | Next / previous word reference |
+### Flash (Fast Jump)
 
-### Terminal & Misc
-| Keymap | Action |
-|--------|--------|
-| `<C-/>` | Toggle terminal |
-| `<leader>ft` | Open terminal (root dir) |
-| `<leader>fT` | Open terminal (current file dir) |
-| `<leader>z` | Toggle zen mode |
-| `<leader>xx` | Toggle diagnostics panel |
-| `<leader>?` | Show buffer keymaps (which-key) |
+| Key | Mode | What it does |
+|-----|------|--------------|
+| `s` | n, x, o | Flash jump |
+| `S` | n, x, o | Flash treesitter |
+| `r` | o | Remote flash |
+| `R` | o, x | Treesitter search |
+
+### Mini.Surround
+
+| Key | What it does |
+|-----|--------------|
+| `gsa` | Add surround |
+| `gsd` | Delete surround |
+| `gsr` | Replace surround |
+| `gsf` / `gsF` | Find surround right / left |
+| `gsh` | Highlight surround |
+
+### Other
+
+| Key | What it does |
+|-----|--------------|
+| `<leader>.` | Toggle scratch buffer |
+| `<leader>z` | Zen mode |
+| `<leader>Z` | Zoom current window |
+| `<C-/>` or `<leader>ft` | Toggle terminal |
+| `<leader>fT` | Terminal in current file’s dir |
+| `<leader>un` | Dismiss notifications |
+| `<leader>?` | Show buffer-local keymaps (which-key) |
 | `<leader>qq` | Quit all |
-| `<C-s>` | Save file |
+
+---
+
+## Quickfix List
+
+The **quickfix list** (often shortened to “qflist”) is a built-in Neovim feature that holds a list of locations across files — essentially a scratchpad of "jump points" you can navigate sequentially. It is different from the location list (`:lopen`), which is per-window; the quickfix list is global per tab page.
+
+### What you can use it for
+
+- **Multi-file search results**: Send all matches from Telescope (`<C-q>`) into the quickfix list, then jump through them one by one without reopening the picker.
+- **Project-wide diagnostics**: Tools like `trouble.nvim` can render the quickfix list in a nice panel, or you can use `:copen` to see raw diagnostics.
+- **Build / lint errors**: Compilers, LSP, linters, and grep tools can populate the quickfix list with `file:line:column:message` entries.
+- **Refactoring workflows**: Search for a pattern, send results to quickfix, then use `:cdo` or `:cfdo` to run a command on every match.
+
+### How to use it
+
+| Command / Keymap | Action |
+|------------------|--------|
+| `:copen` | Open the quickfix window |
+| `:cclose` | Close the quickfix window |
+| `:cnext` or `]q` | Jump to the next item |
+| `:cprev` or `[q` | Jump to the previous item |
+| `:cfirst` | Jump to the first item |
+| `:clast` | Jump to the last item |
+| `:cdo <cmd>` | Execute `<cmd>` on **each line** in the quickfix list |
+| `:cfdo <cmd>` | Execute `<cmd>` on **each file** in the quickfix list |
+
+**In your config**, `]q` and `[q` are smart: if Trouble is open, they jump inside Trouble; otherwise they fall back to standard `:cnext` / `:cprev`.
+
+**Telescope integration**: Press `<C-q>` inside any Telescope picker to dump all visible results into the quickfix list. Press `<M-q>` to send only the currently selected items.
