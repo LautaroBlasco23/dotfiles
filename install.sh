@@ -3,89 +3,37 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BIN_DIR="$HOME/bin"
-CONFIG_DIR="$HOME/.config"
+SCRIPTS_DIR="$REPO_DIR/scripts"
 
-echo "== Installing dotfiles =="
+echo "== Dotfiles installer =="
+echo ""
 
-mkdir -p "$CONFIG_DIR"
-mkdir -p "$BIN_DIR"
-
-install_dependencies() {
-  echo "== Installing dependencies =="
-
-  if ! command -v jq &>/dev/null; then
-    sudo apt-get install -y jq
-    echo "Installed: jq"
-  else
-    echo "Already installed: jq"
-  fi
-}
-
-backup() {
-  local target="$1"
-
-  if [ -e "$target" ] && [ ! -L "$target" ]; then
-    mv "$target" "$target.backup.$(date +%s)"
-    echo "Backup created for $target"
-  fi
-}
-
-link() {
-  local src="$1"
-  local dest="$2"
-
-  backup "$dest"
-
-  if [ ! -L "$dest" ]; then
-    ln -s "$src" "$dest"
-    echo "Linked $dest -> $src"
-  fi
-}
-
-install_scripts() {
-  bash "$REPO_DIR/scripts/init.sh"
-}
-
-ensure_path() {
-  if ! echo "$PATH" | grep -q "$HOME/bin"; then
-    echo 'export PATH="$HOME/bin:$PATH"' >> "$HOME/.bashrc"
-    echo "Added ~/bin to PATH"
-  fi
-}
-
-setup_links() {
-  echo "== Linking configs =="
-
-  # Migrate from old whole-directory ~/.claude symlink to per-file links
-  if [ -L "$HOME/.claude" ] && [ "$(readlink "$HOME/.claude")" = "$REPO_DIR/claude" ]; then
-    echo "Removing old ~/.claude symlink (migrating to per-file links)"
-    rm "$HOME/.claude"
-  fi
-
-  mkdir -p "$HOME/.claude"
-  mkdir -p "$HOME/.opencode"
-
-  link "$REPO_DIR/skills" "$HOME/.claude/skills"
-  link "$REPO_DIR/skills" "$HOME/.opencode/skills"
-
-  link "$REPO_DIR/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
-  link "$REPO_DIR/claude/scripts" "$HOME/.claude/scripts"
-  link "$REPO_DIR/claude/settings.json" "$HOME/.claude/settings.json"
-  link "$REPO_DIR/claude/settings.local.json" "$HOME/.claude/settings.local.json"
-
-  link "$REPO_DIR/nvim" "$CONFIG_DIR/nvim"
-  link "$REPO_DIR/opencode" "$CONFIG_DIR/opencode"
-}
-
-main() {
-  install_dependencies
-  ensure_path
-  install_scripts
-  setup_links
-
-  echo ""
-  echo "Dotfiles installed."
-}
-
-main
+case "$(uname -s)" in
+  Linux)
+    echo "Detected: Linux"
+    exec bash "$SCRIPTS_DIR/install-ubuntu.sh"
+    ;;
+  Darwin)
+    echo "Detected: macOS"
+    exec bash "$SCRIPTS_DIR/install-macos.sh"
+    ;;
+  CYGWIN*|MINGW*|MSYS*)
+    echo "Detected: Windows (via $MSYSTEM)"
+    if command -v powershell.exe &>/dev/null; then
+      powershell.exe -ExecutionPolicy Bypass -File "$SCRIPTS_DIR/install-windows.ps1"
+    else
+      echo "Error: Could not find powershell.exe"
+      echo "Run this script from PowerShell: "
+      echo "  .\\scripts\\install-windows.ps1"
+      exit 1
+    fi
+    ;;
+  *)
+    echo "Error: Unsupported OS ($(uname -s))"
+    echo "You can run the appropriate install script manually:"
+    echo "  Ubuntu/Debian: bash scripts/install-ubuntu.sh"
+    echo "  macOS:         bash scripts/install-macos.sh"
+    echo "  Windows:       powershell scripts/install-windows.ps1"
+    exit 1
+    ;;
+esac

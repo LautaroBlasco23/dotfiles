@@ -27,6 +27,7 @@ echo "== Linking scripts to ~/bin =="
 for script in "$SCRIPT_DIR"/*; do
   name=$(basename "$script")
   [ "$name" = "init.sh" ] && continue   # skip self
+  [[ "$name" == install-* ]] && continue  # skip install scripts
 
   ln -sf "$script" "$BIN_DIR/$name"
   chmod +x "$script"
