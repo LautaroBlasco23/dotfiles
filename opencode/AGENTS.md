@@ -206,7 +206,7 @@ Behaves like: semantic grep, architecture mapper, dependency explorer, readable 
 **Purpose:** Conceptual understanding and technical education. Exists outside the implementation pipeline.
 
 **Profile:** Reasoning, clarity, explanation quality.  
-**Model:** `opencode-go/glm-5.1`
+**Model:** `opencode-go/qwen3.6-plus`
 
 ### Allowed
 - explain architecture
