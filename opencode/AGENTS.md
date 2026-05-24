@@ -16,21 +16,13 @@ The agents are **NOT** autonomous collaborators. They are specialized execution 
 
 ---
 
-## Recommended Workflow
+## Agent Usage
 
-```text
-Explorer
-  ↓
-Plan
-  ↓
-Build
-  ↓
-Tester
-  ↓
-Human review
-```
+Agents are independent execution interfaces.
 
-Optional: `Teacher` (exists outside the implementation loop).
+They may be used in any order, combined selectively, or skipped entirely depending on task requirements.
+
+The human operator owns orchestration decisions.
 
 ---
 
