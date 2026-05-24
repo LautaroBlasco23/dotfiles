@@ -48,7 +48,7 @@
       "description": "Repository discovery and contextual code exploration. Cheap, fast, large context."
     },
     "plan": {
-      "model": "opencode-go/qwen3.6-plus",
+      "model": "opencode-go/kimi-k2.6",
       "temperature": 0.2,
       "description": "Architecture and execution planning. Strong reasoning."
     },
@@ -58,7 +58,7 @@
       "description": "Implementation and code modification. Coding reliability."
     },
     "tester": {
-      "model": "opencode-go/qwen3.6-plus",
+      "model": "opencode-go/deepseek-v4-flash",
       "temperature": 0.2,
       "description": "Validation and testing analysis. Adversarial reasoning."
     },
