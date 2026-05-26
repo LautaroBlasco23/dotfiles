@@ -8,11 +8,18 @@ Currently using Opencode for most of my work. The project also contains some cla
 
 Uses **symlink-based linking** — configs live in this repo and are linked to their expected locations. This means updates apply instantly after `git pull`.
 
+The `skills/` folder is a centralized directory shared by both Claude and Opencode. It contains all agent skills and is linked into both config trees.
+
 Linked configs:
 
 | Repo Path | Linked To |
 |---|---|
-| `claude/` | `~/.claude` |
+| `skills/` | `~/.claude/skills`, `~/.opencode/skills` |
+| `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
+| `claude/scripts` | `~/.claude/scripts` |
+| `claude/settings.json` | `~/.claude/settings.json` |
+| `claude/settings.local.json` | `~/.claude/settings.local.json` |
+| `.claude/` | MCP credentials/stored in `~/.claude/` |
 | `nvim/` | `~/.config/nvim` |
 | `opencode/` | `~/.config/opencode` |
 
@@ -33,7 +40,7 @@ Context-injected rules that auto-trigger based on task type.
 | `coding-typescript` | TypeScript standards (strict mode, Vite, Vitest). |
 | `coding-react` | React standards (functional components, hooks, Vite + React). |
 | `commit-messages` | Conventional Commits format, atomic commits. |
-} `caveman` | Ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. |
+| `caveman` | Ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. |
 | `docs-writer` | Shared `.docs/` output convention (loaded by agents, not auto-triggered). |
 
 ---
@@ -96,9 +103,14 @@ The installer will:
 Result:
 
 ```
-~/.claude           -> ~/dotfiles/claude
-~/.config/nvim      -> ~/dotfiles/nvim
-~/.config/opencode  -> ~/dotfiles/opencode
+~/.claude/CLAUDE.md         -> ~/dotfiles/claude/CLAUDE.md
+~/.claude/scripts           -> ~/dotfiles/claude/scripts
+~/.claude/settings.json     -> ~/dotfiles/claude/settings.json
+~/.claude/settings.local.json  -> ~/dotfiles/claude/settings.local.json
+~/.claude/skills            -> ~/dotfiles/skills
+~/.opencode/skills          -> ~/dotfiles/skills
+~/.config/nvim              -> ~/dotfiles/nvim
+~/.config/opencode          -> ~/dotfiles/opencode
 ```
 
 ---
