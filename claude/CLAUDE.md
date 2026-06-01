@@ -48,21 +48,3 @@ Available skills are auto-triggered based on task context:
 - **test-creation**: creates/improves tests; args: `<test-types> for <module>` (e.g., `unit tests for auth module`)
 
 Skills can also be invoked manually with slash commands (e.g., `/commit`, `/test-creation unit tests for payments/`).
-
-### Pipeline skills
-
-Invoke by tagging (e.g., `@researcher "find auth patterns"`):
-
-| Skill                  | Purpose                                                   | Output                                                      |
-|------------------------|-----------------------------------------------------------|-------------------------------------------------------------|
-| **researcher**         | Finds patterns and conventions in codebase                | `.docs/research.md`                                         |
-| **planner**            | Designs self-contained implementation plan                | `.docs/plan.md`                                             |
-| **implementer**        | Writes code following `.docs/plan.md`                     | summary in response                                         |
-| **implementer-jr**     | Executes mechanical steps (deletes, renames, moves)       | summary in response                                         |
-| **preflight-validator**| Validates project toolchain readiness                     | `CLAUDE.md` Preflight + `.docs/preflight-validation.md`     |
-| **preflighter**        | Runs build/check/test as local CI gate                    | `.docs/preflight.md` on failure only                        |
-
-Workflow: `@researcher` → `@planner` → `@implementer` (or `@implementer-jr` for mechanical steps).
-
-The planner inlines all research into `.docs/plan.md` — implementer reads ONLY the plan, never `.docs/research.md`.
-Run `@preflight-validator` once per project setup; `@preflighter` uses the cached `## Preflight` section on every run.
