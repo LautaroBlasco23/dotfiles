@@ -4,7 +4,7 @@ slug: coding-principles
 description: >-
   Universal code quality principles, language-agnostic.
   TRIGGER when: user asks to implement a feature, write new code, or build something from scratch.
-  Also loaded by the implementer skill.
+  Also loaded by the build skill.
 ---
 
 ## Simplicity

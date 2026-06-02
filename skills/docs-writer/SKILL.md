@@ -3,7 +3,7 @@ name: docs-writer
 slug: docs-writer
 description: >-
   Convention for writing pipeline artifacts to .docs/ directory.
-  TRIGGER when: writing researcher, planner, preflighter, or preflight-validator output.
+  TRIGGER when: writing researcher, plan, preflighter, or preflight-validator output.
 ---
 
 ## Convention
@@ -38,6 +38,6 @@ Each run overwrites the previous file. No versioning — git history preserves c
 | Skill               | File                            | Notes                                        |
 |---------------------|---------------------------------|----------------------------------------------|
 | researcher          | `.docs/research.md`             |                                              |
-| planner             | `.docs/plan.md`                 |                                              |
+| plan                | `.docs/plan.md`                 |                                              |
 | preflight-validator | `.docs/preflight-validation.md` | Also writes `## Preflight` to `CLAUDE.md`    |
 | preflighter         | `.docs/preflight.md`            | Only written on failure                      |
