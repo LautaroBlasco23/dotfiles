@@ -1,50 +1,52 @@
 # Claude Workspace Rules
 
-> ⚠️ **NEVER read `.env`, `.env.*`, or any environment variable files.** These contain sensitive secrets.
+> **NEVER read `.env`, `.env.*`, or any environment variable files.** These contain sensitive secrets.
 
-General development preferences.
+## Primary stack
 
-## Languages
+- Backend: Go
+- Frontend: TypeScript
 
-Prefer:
+Specific idioms live in per-project CLAUDE.md files. This file is stack-agnostic.
 
-- Go
-- TypeScript (frontend)
+## Output style
 
-If suggesting another language, explain why it is a better fit.
+Default to the shortest answer that is still complete.
 
-## Architecture
+- Lead with the answer. No preamble, no restating the question.
+- Use structured output (bullets, tables, code blocks) over prose.
+- Always include file paths when referencing code.
+- Match the user's register. Terse in, terse out. Depth requested, depth delivered.
+- No emoji unless the user uses them first.
+- No filler ("Great question", "I'd be happy to...", "Certainly!").
+- If the user asks for code, give code. If they ask for an explanation, give an explanation. Don't mix unless asked.
 
-Prefer backend-first architectures.
+## Task shape
 
-Recommended structure:
+Match the output to the request. Most prompts fit one of these:
 
-- layered architecture
-- DDD-inspired design
+- **Explain / teach** — short prose, a diagram if useful, no code unless asked. End with a one-line summary.
+- **Compare** — table with columns for the dimensions that matter. Recommendation in one line at the end.
+- **Plan / design** — use the `plan` agent. Do not write code in chat.
+- **Refactor / change** — show the diff, not the full file. Explain *why* in one line.
+- **Debug** — reproduce the failure first, then the cause, then the fix. Order matters.
+- **Review** — list issues grouped by severity (blocking / important / nit). No "looks good!" preamble.
 
-Typical layers:
+## Universal coding principles
 
-core/
-application/
-infrastructure/
-
-## Development practices
-
-- prioritize simple solutions
-- suggest tests when relevant
-- avoid unnecessary abstractions
+- A function longer than ~40 lines needs justification.
+- Names describe meaning, not type. `users`, not `userList`.
+- Public functions ship with at least one test for the happy path.
+- New abstraction requires the third use case, not the first.
+- Prefer pure functions; isolate side effects at the edges.
+- Prefer duplication over premature abstraction across domains.
 
 ## Skills
 
 Available skills are auto-triggered based on task context:
 
-- **agent-injection**: MANDATORY rules for spawning agents — context injection, specificity, task partitioning, token budget. Fires on every agent invocation.
-- **coding-principles**: universal code quality principles, language-agnostic. Also loaded by `implementer`.
-- **commit**: Conventional Commits format, atomic commits, no AI metadata
-- **architecture**: system design, project structure, layer boundaries
 - **caveman**: ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra.
-- **docs-writer**: `.docs/` output convention for pipeline skills
-- **test-analysis**: audits test coverage for a module — gaps, partial coverage, quality issues
-- **test-creation**: creates/improves tests; args: `<test-types> for <module>` (e.g., `unit tests for auth module`)
+- **coding-principles**: universal code quality principles, language-agnostic.
+- **commit**: Conventional Commits format, atomic commits, no AI metadata
 
-Skills can also be invoked manually with slash commands (e.g., `/commit`, `/test-creation unit tests for payments/`).
+Skills can also be invoked manually with slash commands (e.g., `/commit`).
