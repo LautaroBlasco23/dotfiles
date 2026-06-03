@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
     "PlenaryTestPopup", "gitsigns-blame", "help", "lspinfo", "notify",
-    "qf", "spectre_panel", "startuptime", "tsplayground", "neotest-output",
+    "qf", "startuptime", "tsplayground", "neotest-output",
     "checkhealth", "neotest-summary", "neotest-output-panel", "dbout", "grug-far",
   },
   callback = function(event)

@@ -63,7 +63,6 @@ return {
       { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document symbols" },
       { "<leader>sS", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Workspace symbols" },
       { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "Word under cursor" },
-      { "<leader>sr", "<cmd>Telescope resume<cr>", desc = "Resume last search" },
       {
         "<leader>fC",
         function()
@@ -274,6 +273,32 @@ return {
         end,
         desc = "Next trouble/quickfix item",
       },
+    },
+  },
+
+  -- Search and replace
+  {
+    "MagicDuck/grug-far.nvim",
+    cmd = "GrugFar",
+    keys = {
+      {
+        "<leader>sr",
+        function()
+          local grug = require("grug-far")
+          grug.open({ transient = true, prefills = { search = vim.fn.expand("<cword>") } })
+        end,
+        mode = { "n", "x" },
+        desc = "Search and Replace",
+      },
+      {
+        "<leader>sR",
+        "<cmd>Telescope resume<cr>",
+        desc = "Resume last search",
+      },
+    },
+    opts = {
+      maxWorkers = 3,
+      resultLimit = 5000,
     },
   },
 
