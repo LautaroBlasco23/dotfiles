@@ -19,7 +19,6 @@ Linked configs:
 | `claude/scripts` | `~/.claude/scripts` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `claude/settings.local.json` | `~/.claude/settings.local.json` |
-| `.claude/` | MCP credentials/stored in `~/.claude/` |
 | `nvim/` | `~/.config/nvim` |
 | `opencode/` | `~/.config/opencode` |
 
@@ -27,21 +26,15 @@ Scripts in `scripts/` (except `init.sh`) are linked to `~/bin/` and made availab
 
 ---
 
-## Claude Skills
+## Skills
 
-Context-injected rules that auto-trigger based on task type.
+Context-injected rules shared by Claude and Opencode. They auto-trigger based on task type, or can be invoked manually with slash commands (e.g. `/caveman`, `/commit`).
 
 | Skill | Description |
 |---|---|
-| `agent-injection` | Mandatory rules for spawning agents (context, specificity, token budget). |
-| `architecture` | Guidance on system design and layer boundaries. |
-| `coding-principles` | Core code quality principles applied to any implementation. |
-| `coding-golang` | Idiomatic Go standards (Fiber, sqlx/pgx, slog, table-driven tests). |
-| `coding-typescript` | TypeScript standards (strict mode, Vite, Vitest). |
-| `coding-react` | React standards (functional components, hooks, Vite + React). |
-| `commit-messages` | Conventional Commits format, atomic commits. |
 | `caveman` | Ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. |
-| `docs-writer` | Shared `.docs/` output convention (loaded by agents, not auto-triggered). |
+| `coding-principles` | Universal code quality principles, language-agnostic. |
+| `commit` | Conventional Commits format, atomic commits, no AI metadata. |
 
 ---
 
@@ -56,27 +49,29 @@ Context-injected rules that auto-trigger based on task type.
 
 ### Opencode Models
 
-Currently I'm only using Qwen 3.6 plus for thinking related tasks and DeepSeek V4 Flash for most of the coding/exploring work.
+Models configured in `opencode/opencode.json`. Agents below use `deepseek-v4-flash` for coding/exploring and `qwen3.6-plus` for planning/teaching.
 
 | Model | Provider | ID |
 |---|---|---|
 | DeepSeek V4 Flash | OpenCode Go | `opencode-go/deepseek-v4-flash` |
-| Qwen3.6 Plus | OpenCode Go | `opencode-go/qwen3.6-plus` |
+| Qwen 3.6 Plus | OpenCode Go | `opencode-go/qwen3.6-plus` |
+| MiniMax M2.5 Free | OpenCode Zen (free) | `opencode/minimax-m2.5-free` |
+
+### Honorable Mentions
+
+Currently testing **Mimo V2.5** and **MiniMax M3** for some tasks. They are doing a great job at the moment — strong contenders to become part of the default roster once they stabilize.
 
 ### Agents
 
-I'm just using main agents in Opencode right now.
-
-#### Main Agents
+Defined in `opencode/agents/`.
 
 | Agent | Model | Description |
 |---|---|---|
-| `build` | DeepSeek V4 Pro | **Default build** — runs build operations for the project. |
-| `build-kimi` | Kimi K2.6 | Build with long-context strength (previous default). |
-| `build-qwen` | Qwen3.6 Plus | Build with strong instruction-following and structure. |
-| `plan` | Qwen3.6 Plus | **Default plan** — creates implementation plans for tasks. |
-| `plan-deepseek` | DeepSeek V4 Pro | Plan for deep reasoning and complex architecture. |
-| `plan-kimi` | Kimi K2.6 | Plan for very large codebases needing huge context. |
+| `build` | DeepSeek V4 Flash | **Default build** — runs implementation work per a plan. |
+| `plan` | Qwen 3.6 Plus | **Default plan** — architecture and execution planning. |
+| `explorer` | DeepSeek V4 Flash | Repository discovery and contextual code exploration. Read-only. |
+| `teacher` | Qwen 3.6 Plus | Conceptual understanding and technical education. No code changes. |
+| `tester` | DeepSeek V4 Flash | Validation and testing analysis. Adversarial reasoning. |
 
 ---
 
