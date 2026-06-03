@@ -11,20 +11,8 @@
         "deepseek-v4-flash": {
           "name": "DeepSeek V4 Flash"
         },
-        "qwen3.6-plus": {
-          "name": "Qwen 3.6 Plus"
-        }
-      }
-    },
-    "opencode": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "OpenCode Zen (free)",
-      "options": {
-        "baseURL": "https://opencode.ai/zen/v1"
-      },
-      "models": {
-        "minimax-m2.5-free": {
-          "name": "MiniMax M2.5 Free"
+        "qwen3.7-plus": {
+          "name": "Qwen 3.7 Plus"
         }
       }
     }

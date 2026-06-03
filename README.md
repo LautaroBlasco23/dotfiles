@@ -49,12 +49,12 @@ Context-injected rules shared by Claude and Opencode. They auto-trigger based on
 
 ### Opencode Models
 
-Models configured in `opencode/opencode.json`. Agents below use `deepseek-v4-flash` for coding/exploring and `qwen3.6-plus` for planning/teaching.
+Models configured in `opencode/opencode.json`. Agents below use `deepseek-v4-flash` for coding/exploring and `qwen3.7-plus` for planning/teaching.
 
 | Model | Provider | ID |
 |---|---|---|
 | DeepSeek V4 Flash | OpenCode Go | `opencode-go/deepseek-v4-flash` |
-| Qwen 3.6 Plus | OpenCode Go | `opencode-go/qwen3.6-plus` |
+| Qwen 3.7 Plus | OpenCode Go | `opencode-go/qwen3.7-plus` |
 | MiniMax M2.5 Free | OpenCode Zen (free) | `opencode/minimax-m2.5-free` |
 
 ### Honorable Mentions
@@ -68,9 +68,9 @@ Defined in `opencode/agents/`.
 | Agent | Model | Description |
 |---|---|---|
 | `build` | DeepSeek V4 Flash | **Default build** — runs implementation work per a plan. |
-| `plan` | Qwen 3.6 Plus | **Default plan** — architecture and execution planning. |
+| `plan` | Qwen 3.7 Plus | **Default plan** — architecture and execution planning. |
 | `explorer` | DeepSeek V4 Flash | Repository discovery and contextual code exploration. Read-only. |
-| `teacher` | Qwen 3.6 Plus | Conceptual understanding and technical education. No code changes. |
+| `teacher` | Qwen 3.7 Plus | Conceptual understanding and technical education. No code changes. |
 | `tester` | DeepSeek V4 Flash | Validation and testing analysis. Adversarial reasoning. |
 
 ---
