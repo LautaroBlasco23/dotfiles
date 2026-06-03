@@ -59,7 +59,7 @@ Models configured in `opencode/opencode.json`. Agents below use `deepseek-v4-fla
 
 ### Honorable Mentions
 
-Currently testing **Mimo V2.5** and **MiniMax M3** for some tasks. They are doing a great job at the moment — strong contenders to become part of the default roster once they stabilize.
+Currently testing **Mimo V2.5** and **MiniMax M3** for some tasks. They are doing a great job at the moment — strong contenders to become part of the default roster.
 
 ### Agents
 
@@ -107,6 +107,31 @@ Result:
 ~/.config/nvim              -> ~/dotfiles/nvim
 ~/.config/opencode          -> ~/dotfiles/opencode
 ```
+
+---
+
+## Clone OpenCode
+
+Pull just the `opencode/` folder into `~/.config/opencode` without cloning the whole repo:
+
+```bash
+mkdir -p ~/.config/opencode && curl -L https://github.com/lautaroblasco23/dotfiles/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 -C ~/.config/opencode dotfiles-main/opencode
+cd ~/.config/opencode && bun install   # or: npm install
+```
+
+Re-run the command to update. This **overwrites** files in `~/.config/opencode` — back up any local changes first.
+
+---
+
+## Clone Neovim
+
+Pull just the `nvim/` folder into `~/.config/nvim`:
+
+```bash
+mkdir -p ~/.config/nvim && curl -L https://github.com/lautaroblasco23/dotfiles/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 -C ~/.config/nvim dotfiles-main/nvim
+```
+
+Plugins install on first launch via `lazy.nvim`. Re-run the command to update.
 
 ---
 
