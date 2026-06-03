@@ -11,20 +11,8 @@
         "deepseek-v4-flash": {
           "name": "DeepSeek V4 Flash"
         },
-        "qwen3.5-plus": {
-          "name": "Qwen 3.5 Plus"
-        },
         "qwen3.6-plus": {
           "name": "Qwen 3.6 Plus"
-        },
-        "glm-5.1": {
-          "name": "GLM 5.1"
-        },
-        "deepseek-v4-pro": {
-          "name": "DeepSeek V4 Pro"
-        },
-        "kimi-k2.6": {
-          "name": "Kimi K2.6 (3x limits)"
         }
       }
     },
