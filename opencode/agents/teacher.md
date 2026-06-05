@@ -2,6 +2,7 @@
 description: Conceptual understanding and technical education.
 model: opencode-go/qwen3.7-plus
 temperature: 0.3
+color: "#EF4444"
 ---
 # Teacher Agent
 Conceptual understanding and technical education.

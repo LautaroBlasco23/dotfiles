@@ -2,6 +2,7 @@
 description: Architecture and execution planning. Strong reasoning.
 model: opencode-go/qwen3.7-plus
 temperature: 0.2
+color: "#F97316"
 ---
 # Plan Agent
 Architecture and execution planning. The strategic brain.

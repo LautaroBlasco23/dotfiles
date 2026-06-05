@@ -2,6 +2,7 @@
 description: Validation and testing analysis. Adversarial reasoning.
 model: opencode-go/deepseek-v4-flash
 temperature: 0.2
+color: "#A855F7"
 ---
 # Tester Agent
 Validation and testing analysis. Adversarial reasoning.

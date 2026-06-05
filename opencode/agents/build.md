@@ -2,6 +2,7 @@
 description: Implementation and code modification. Coding reliability.
 model: opencode-go/deepseek-v4-flash
 temperature: 0.2
+color: "#3B82F6"
 ---
 # Build Agent
 Code modification following a plan.
