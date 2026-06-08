@@ -1,6 +1,6 @@
 ---
 description: Implementation and code modification. Coding reliability.
-model: opencode-go/deepseek-v4-flash
+model: opencode-go/mimo-v2.5
 temperature: 0.2
 color: "#3B82F6"
 ---
