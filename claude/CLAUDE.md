@@ -2,12 +2,6 @@
 
 > **NEVER read `.env`, `.env.*`, or any environment variable files.**
 
-## Primary stack
-- Backend: Go
-- Frontend: TypeScript
-
-Specific idioms live in per-project CLAUDE.md files. This file is stack-agnostic.
-
 ## Output style
 Default to the shortest answer that is still complete.
 
