@@ -4,16 +4,23 @@ slug: coding-principles
 description: >-
   Universal code quality principles, language-agnostic.
   TRIGGER when: user asks to implement a feature, write new code, or build something from scratch.
+    TRIGGER when: implementing new features, making architectural decisions, refactoring existing code, generating production-ready code
   Also loaded by the build skill.
 ---
 
 ## Simplicity
 
 - Flat over layered when structure isn't justified
-- Small functions, one responsibility (~30 lines max)
-- Return early to reduce nesting
+- Small functions with a single responsibility.
+- Extract only when readability improves.- Return early to reduce nesting
 - Three similar lines > premature abstraction
 - Only abstract when a pattern has proven itself across 3+ real use cases
+
+#### Before adding new code:
+- Can existing code be extended instead?
+- Can existing abstractions be reused?
+- Prefer modifying working code over introducing parallel paths.
+
 
 ## Error handling
 
