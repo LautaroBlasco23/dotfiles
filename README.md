@@ -2,15 +2,21 @@
 
 Personal development environment configuration.
 
-Currently using Opencode for most of my work. The project also contains some claude configurations because I'm also using it in some cases.
+## Workflow
+
+```
+explore → what exists
+plan → what to do
+build → implement it
+validator → verify it
+analyst → discuss ideas, tradeoffs, unknowns
+```
 
 ---
 
-Uses **symlink-based linking** — configs live in this repo and are linked to their expected locations. This means updates apply instantly after `git pull`.
+## Structure
 
-The `skills/` folder is a centralized directory shared by both Claude and Opencode. It contains all agent skills and is linked into both config trees.
-
-Linked configs:
+Uses **symlink-based linking** — configs live in this repo and are linked to their expected locations. Updates apply instantly after `git pull`.
 
 | Repo Path | Linked To |
 |---|---|
@@ -40,38 +46,22 @@ Context-injected rules shared by Claude and Opencode. They auto-trigger based on
 
 ## OpenCode
 
-### Providers
-
-| Provider | Name | Base URL |
-|---|---|---|
-| `opencode-go` | OpenCode Go | `https://opencode.ai/zen/go/v1` |
-| `opencode` | OpenCode Zen (free) | `https://opencode.ai/zen/v1` |
-
-### Opencode Models
-
-Models configured in `opencode/opencode.json`. Agents below use `deepseek-v4-flash` for coding/exploring and `qwen3.7-plus` for planning/teaching.
-
-| Model | Provider | ID |
-|---|---|---|
-| DeepSeek V4 Flash | OpenCode Go | `opencode-go/deepseek-v4-flash` |
-| Qwen 3.7 Plus | OpenCode Go | `opencode-go/qwen3.7-plus` |
-| MiniMax M2.5 Free | OpenCode Zen (free) | `opencode/minimax-m2.5-free` |
-
-### Honorable Mentions
-
-Currently testing **Mimo V2.5** and **MiniMax M3** for some tasks. They are doing a great job at the moment — strong contenders to become part of the default roster.
-
-### Agents
-
 Defined in `opencode/agents/`.
 
-| Agent | Model | Description |
-|---|---|---|
-| `build` | DeepSeek V4 Flash | **Default build** — runs implementation work per a plan. |
-| `plan` | Qwen 3.7 Plus | **Default plan** — architecture and execution planning. |
-| `explorer` | DeepSeek V4 Flash | Repository discovery and contextual code exploration. Read-only. |
-| `teacher` | Qwen 3.7 Plus | Conceptual understanding and technical education. No code changes. |
-| `tester` | DeepSeek V4 Flash | Validation and testing analysis. Adversarial reasoning. |
+| Model | ID |
+|---|---|
+| DeepSeek V4 Flash | `opencode-go/deepseek-v4-flash` |
+| Qwen 3.7 Plus | `opencode-go/qwen3.7-plus` |
+
+Agents use `deepseek-v4-flash` for coding/exploring and `qwen3.7-plus` for planning/analysis.
+
+| Agent | Description |
+|---|---|
+| `build` | Implementation work per a plan. |
+| `plan` | Architecture and execution planning. |
+| `explorer` | Repository discovery and contextual code exploration. Read-only. |
+| `analyst` | Technical analysis, design review, tradeoff evaluation, and engineering guidance. |
+| `validator` | Validation and testing analysis. Adversarial reasoning. |
 
 ---
 
@@ -89,74 +79,21 @@ Run the installer:
 cd ~/dotfiles && ./install.sh
 ```
 
-The installer will:
+## Partial Install
 
-- create required directories
-- backup existing configs
-- create symlinks
+Pull individual configs without cloning the full repo:
 
-Result:
-
-```
-~/.claude/CLAUDE.md         -> ~/dotfiles/claude/CLAUDE.md
-~/.claude/scripts           -> ~/dotfiles/claude/scripts
-~/.claude/settings.json     -> ~/dotfiles/claude/settings.json
-~/.claude/settings.local.json  -> ~/dotfiles/claude/settings.local.json
-~/.claude/skills            -> ~/dotfiles/skills
-~/.opencode/skills          -> ~/dotfiles/skills
-~/.config/nvim              -> ~/dotfiles/nvim
-~/.config/opencode          -> ~/dotfiles/opencode
-```
-
----
-
-## Clone OpenCode
-
-Pull just the `opencode/` folder into `~/.config/opencode` without cloning the whole repo:
+**OpenCode:**
 
 ```bash
 mkdir -p ~/.config/opencode && curl -L https://github.com/lautaroblasco23/dotfiles/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 -C ~/.config/opencode dotfiles-main/opencode
 cd ~/.config/opencode && bun install   # or: npm install
 ```
 
-Re-run the command to update. This **overwrites** files in `~/.config/opencode` — back up any local changes first.
-
----
-
-## Clone Neovim
-
-Pull just the `nvim/` folder into `~/.config/nvim`:
+**Neovim:**
 
 ```bash
 mkdir -p ~/.config/nvim && curl -L https://github.com/lautaroblasco23/dotfiles/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 -C ~/.config/nvim dotfiles-main/nvim
 ```
 
-Plugins install on first launch via `lazy.nvim`. Re-run the command to update.
-
----
-
-## Updating
-
-Pull the latest changes from the repo:
-
-```bash
-cd ~/dotfiles && git pull
-```
-
-Because the configs are symlinked, updates apply automatically.
-
----
-
-## Links to install the used tools
-
-Claude:
-
-https://code.claude.com/docs/en/quickstart
-
-Neovim:
-
-https://neovim.io/doc/install/
-
-Opencode:
-
-https://opencode.ai
+Plugins install on first launch via `lazy.nvim`. Re-run the commands to update.

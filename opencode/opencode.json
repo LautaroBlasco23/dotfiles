@@ -11,13 +11,18 @@
         "deepseek-v4-flash": {
           "name": "DeepSeek V4 Flash"
         },
-        "mimo-v2.5": {
-          "name": "MiMo-V2.5"
-        },
         "qwen3.7-plus": {
           "name": "Qwen 3.7 Plus"
         }
       }
+    }
+  },
+  "mcp": {
+    "github": {
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "enabled": true,
+      "oauth": false
     }
   }
 }

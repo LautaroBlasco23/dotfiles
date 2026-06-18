@@ -25,3 +25,6 @@ claude/tasks/
 
 # Package lock files
 **/package-lock.json
+
+# Environment variables (secrets, tokens)
+.env
