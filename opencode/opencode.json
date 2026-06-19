@@ -13,6 +13,9 @@
         },
         "qwen3.7-plus": {
           "name": "Qwen 3.7 Plus"
+        },
+        "glm-5.2": {
+          "name": "GLM-5.2"
         }
       }
     }

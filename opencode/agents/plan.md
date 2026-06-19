@@ -1,6 +1,6 @@
 ---
 description: Architecture and execution planning. Strong reasoning.
-model: opencode-go/qwen3.7-plus
+model: opencode-go/glm-5.2
 temperature: 0.2
 color: "#F97316"
 ---
