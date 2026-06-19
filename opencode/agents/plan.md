@@ -30,8 +30,15 @@ Omit sections that don't apply. A small change doesn't need a Risks section.
 - tradeoff analysis
 - sequencing decisions across multiple steps
 
+## Delegation
+
+- Delegate ALL codebase exploration to the **explore** agent. It uses a cheaper, faster model optimized for read-only discovery.
+- When you need to understand existing code, trace dependencies, locate files, or map architecture — spawn explore. Do not read files yourself.
+- You reason over explore's output. You do not gather raw data from the codebase directly.
+
 ## Forbidden
 - large-scale repository exploration
+- reading codebase files directly (delegate to explore)
 - production implementation
 - broad code generation
 - writing any source files
