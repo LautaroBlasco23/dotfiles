@@ -75,6 +75,8 @@ return {
       vim.list_extend(ensure_installed, {
         "stylua", "prettier", "eslint_d", "black", "isort",
         "goimports", "shfmt",
+        -- Debug adapters
+        "delve", "js-debug-adapter",
       })
 
       require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
