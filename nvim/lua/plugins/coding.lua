@@ -87,6 +87,8 @@ return {
         indent = { enable = true },
         ensure_installed = { "bash", "regex" },
       })
+      -- Fix TSNode[] format incompatibility in Neovim 0.12+ (see config/treesitter.lua)
+      require("config.treesitter")
     end,
   },
   -- Comments
