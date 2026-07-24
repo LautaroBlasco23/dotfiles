@@ -7,9 +7,8 @@ Personal development environment configuration.
 ```
 explore → what exists
 plan → what to do
-build → implement it
+build → analyze, design, and implement
 validator → verify it
-analyst → discuss ideas, tradeoffs, unknowns
 ```
 
 ---
@@ -53,14 +52,13 @@ Defined in `opencode/agents/`.
 | DeepSeek V4 Flash | `opencode-go/deepseek-v4-flash` |
 | Qwen 3.7 Plus | `opencode-go/qwen3.7-plus` |
 
-Agents use `deepseek-v4-flash` for coding/exploring and `qwen3.7-plus` for planning/analysis.
+Agents use `deepseek-v4-flash` for exploring and `qwen3.7-plus` for planning, analysis, and implementation.
 
 | Agent | Description |
 |---|---|
-| `build` | Implementation work per a plan. |
+| `build` | Engineering-oriented agent for analysis, design, and implementation. |
 | `plan` | Architecture and execution planning. |
 | `explorer` | Repository discovery and contextual code exploration. Read-only. |
-| `analyst` | Technical analysis, design review, tradeoff evaluation, and engineering guidance. |
 | `validator` | Validation and testing analysis. Adversarial reasoning. |
 
 ---
