@@ -1,6 +1,7 @@
 ---
 description: Repository discovery and contextual code exploration. Cheap, fast, large context.
 model: opencode-go/deepseek-v4-flash
+reasoningEffort: high
 temperature: 0.1
 mode: all
 color: "#22C55E"

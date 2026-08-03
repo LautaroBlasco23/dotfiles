@@ -1,6 +1,7 @@
 ---
 description: Architecture and execution planning. Strong reasoning.
-model: opencode-go/glm-5.2
+model: opencode-go/deepseek-v4-flash
+reasoningEffort: max
 temperature: 0.2
 color: "#F97316"
 ---
