@@ -15,19 +15,19 @@ validator → verify it
 
 ## Structure
 
-Uses **symlink-based linking** — configs live in this repo and are linked to their expected locations. Updates apply instantly after `git pull`.
+Uses **copy-based syncing** — `sync.sh` copies the tracked configs in this repo to their expected locations as real files (no symlinks). Run `./sync.sh` after `git pull` to apply updates.
 
-| Repo Path | Linked To |
+| Repo Path | Synced To |
 |---|---|
-| `skills/` | `~/.claude/skills`, `~/.opencode/skills` |
-| `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
-| `claude/scripts` | `~/.claude/scripts` |
-| `claude/settings.json` | `~/.claude/settings.json` |
-| `claude/settings.local.json` | `~/.claude/settings.local.json` |
-| `nvim/` | `~/.config/nvim` |
 | `opencode/` | `~/.config/opencode` |
+| `claude/` | `~/.claude` |
+| `nvim/` | `~/.config/nvim` |
+| `skills/` | `~/.claude/skills`, `~/.opencode/skills` |
 
-Scripts in `scripts/` (except `init.sh`) are linked to `~/bin/` and made available in your `$PATH`.
+Notes:
+
+- Only git-tracked files are copied; machine-local files (`claude/settings.local.json`) are excluded.
+- Sync is one-way (repo → home). Local edits to the copied configs are overwritten on the next run.
 
 ---
 
@@ -71,11 +71,13 @@ Clone the repository:
 git clone git@github.com:lautaroblasco23/dotfiles.git ~/dotfiles
 ```
 
-Run the installer:
+Run the sync (copies configs to `~/.config` and `~/.claude`):
 
 ```bash
-cd ~/dotfiles && ./install.sh
+cd ~/dotfiles && ./sync.sh
 ```
+
+Preview first with `./sync.sh --dry-run`. Re-run after `git pull` to apply updates.
 
 ## Partial Install
 
