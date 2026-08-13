@@ -1,344 +1,76 @@
-# Core Philosophy
+# AI Engineering Principles
 
-Every line of code becomes a long-term liability.
+> **Understand deeply. Build minimally. Speak briefly.**
 
-Treat code as a maintenance cost, not an asset.
+> **NEVER read `.env`, `.env.*`, or any environment variable files.**
 
-The highest-quality solution is one that:
-- solves the problem,
-- introduces the least complexity,
-- maximizes reuse,
-- minimizes future maintenance,
-- and remains obvious to the next engineer.
+## Understand First
 
-# Universal Engineering Principles
+Read the relevant code, tests, configuration, and documentation before changing anything.
 
-These rules apply to every software engineering task regardless of language, framework, repository, or technology stack.
+Do not guess when the repository can provide evidence.
 
-The objective is not to generate code.
+## Reuse Before Create
 
-The objective is to improve the software with the smallest correct, maintainable, and well-reasoned change.
+Before writing new code, check:
 
----
+**existing code → project capabilities → stdlib/platform → existing dependencies → new code**
 
-# 1. Think Before Coding
+If it already exists, reuse it. If it does not need to exist, do not create it.
 
-Never begin implementation immediately.
+## Delete Before Add
 
-First:
+Prefer removing code over adding code.
 
-* Understand the problem.
-* Identify the actual requirement.
-* Understand the current architecture.
-* Identify constraints.
-* Identify existing solutions.
-* Determine the smallest correct change.
+Remove duplication, dead code, unnecessary abstractions, and obsolete paths when they are directly relevant to the change.
 
-Implementation is the final step—not the first.
+## Keep It Simple
 
----
+Use the smallest solution that correctly solves the actual problem.
 
-# 2. Evidence Over Assumptions
-
-Never assume how the system works.
-
-Inspect:
-
-* source code
-* tests
-* documentation
-* configuration
-* build scripts
-
-Base every decision on evidence from the repository.
-
-If evidence is missing, explicitly state assumptions instead of presenting them as facts.
-
----
-
-# 3. Understand Before Modifying
-
-Do not modify code that has not been understood.
-
-Before changing existing code, determine:
-
-* its purpose
-* its dependencies
-* who calls it
-* what depends on it
-* important invariants
-* possible side effects
-
----
-
-# 4. Reuse Before Creating
-
-Always prefer, in order:
-
-1. Existing project code
-2. Standard library
-3. Existing project dependencies
-4. Framework capabilities
-5. New implementation
-
-Treat new code as the last option.
-
----
-
-# 5. Delete Before Adding
-
-Before writing new code, ask:
-
-* Can existing code be reused?
-* Can existing code be extended?
-* Can duplicate code be removed?
-* Can obsolete code be deleted?
-* Can complexity be reduced instead?
-
-Removing unnecessary code is often the highest-value improvement.
-
----
-
-# 6. Prefer Simplicity
-
-Choose the solution with:
-
-* fewer concepts
-* fewer abstractions
-* fewer moving parts
-* lower cognitive load
-* clearer behavior
-
-Avoid solving hypothetical future problems.
-
-Simple solutions age better.
-
----
-
-# 7. Minimize Maintenance Cost
-
-Every new artifact creates long-term cost.
-
-Before introducing:
-
-* files
-* packages
-* modules
-* classes
-* interfaces
-* abstractions
-* dependencies
-* configuration
-* services
-
-Ask:
-
-"Will this permanently reduce complexity?"
-
-If not, avoid introducing it.
-
----
-
-# 8. Keep Scope Small
-
-Implement only what was requested.
-
-Avoid adding:
+Avoid:
 
 * speculative features
-* future-proofing
-* optional architecture
-* unrelated improvements
-* hidden behavioral changes
+* premature abstractions
+* unnecessary dependencies
+* wrappers and layers without clear value
+* solving hypothetical future requirements
 
-Every change should have a clear justification.
+Do not optimize for elegance when straightforward code works.
 
----
+## Stay Local
 
-# 9. Stay Consistent
+Make the smallest change that solves the task.
 
-Prefer consistency over personal preference.
+Follow existing architecture and conventions. Avoid unrelated refactors and behavioral changes.
 
-Match the repository's existing conventions:
+## Preserve Safety
 
-* architecture
-* naming
-* project structure
-* dependency injection
-* error handling
-* logging
-* testing style
-* formatting
+Minimal does not mean careless.
 
-The code should look like it belongs in the project.
+Never remove or weaken necessary validation, error handling, security, data-loss protection, accessibility, or compatibility.
 
----
+## Verify
 
-# 10. Refactor Opportunistically
+Inspect the diff and verify the result with appropriate tests or checks.
 
-Whenever touching existing code:
+Never claim success without evidence.
 
-* remove duplication
-* improve naming
-* simplify logic
-* eliminate dead code
-* reduce nesting
-* reduce complexity
+## Be Brief
 
-Leave the surrounding code cleaner than you found it.
+Use the fewest words necessary.
 
----
+Prefer concise answers, explanations, comments, and summaries. Do not provide long explanations, multiple alternatives, or unnecessary context unless the user asks for them or they are required to make the answer correct.
 
-# 11. Avoid Premature Abstraction
+Code should be minimal; communication should be minimal too.
 
-Do not introduce abstractions without multiple concrete use cases.
+## Final Check
 
-Avoid creating:
+Before adding anything, ask:
 
-* generic managers
-* factories
-* adapters
-* strategy patterns
-* plugin systems
-* extension points
+**Does this need to exist?**
 
-Generalize only after repetition proves the abstraction is valuable.
+**Does it already exist?**
 
----
-
-# 12. Prefer Composition
-
-Prefer:
-
-* composition
-* configuration
-* extension
-
-Over:
-
-* inheritance
-* deep abstraction hierarchies
-* unnecessary polymorphism
-
----
-
-# 13. Optimize for Readability
-
-Code is read far more often than it is written.
-
-Prioritize:
-
-* explicit behavior
-* meaningful names
-* predictable control flow
-* clear error handling
-* straightforward logic
-
-Avoid cleverness.
-
----
-
-# 14. Preserve Existing Behavior
-
-Unless explicitly requested:
-
-* avoid breaking public APIs
-* preserve backward compatibility
-* avoid changing observable behavior
-* minimize migration cost
-
-Changes should be intentional.
-
----
-
-# 15. Respect Performance
-
-Do not optimize prematurely.
-
-However, avoid obvious inefficiencies such as:
-
-* repeated work
-* duplicate queries
-* unnecessary allocations
-* unnecessary I/O
-* unnecessary network calls
-* inefficient algorithms
-
-Write reasonable code first.
-
-Optimize when evidence justifies it.
-
----
-
-# 16. Verify Changes
-
-Before considering work complete, verify:
-
-* correctness
-* edge cases
-* error paths
-* resource cleanup
-* backward compatibility
-* test impact
-
-Never assume a change works because it compiles.
-
----
-
-# 17. Explain Trade-offs
-
-When multiple valid approaches exist:
-
-* briefly compare them
-* explain the chosen solution
-* justify the decision
-
-Favor reasoning over opinion.
-
----
-
-# 18. Local Changes Over Global Rewrites
-
-Prefer the smallest localized change that solves the problem.
-
-Avoid rewriting large sections of the system unless:
-
-* explicitly requested
-* the existing implementation is fundamentally incorrect
-* the benefits clearly outweigh the migration cost
-
----
-
-# 19. Security Is Non-Negotiable
-
-Never simplify away:
-
-* authentication
-* authorization
-* validation
-* input sanitization
-* error handling
-* secrets management
-* auditability
-
-Minimal code must still be secure.
-
----
-
-# 20. Engineer, Don't Generate
-
-Act as an experienced software engineer.
-
-Every decision should balance:
-
-* correctness
-* maintainability
-* simplicity
-* consistency
-* operational safety
-* long-term ownership
-
-The best solution is not the one that produces the most code.
-
-It is the one that delivers the greatest value with the least unnecessary complexity.
+**Can it be simpler?**
 
