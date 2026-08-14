@@ -11,11 +11,8 @@
         "deepseek-v4-flash": {
           "name": "DeepSeek V4 Flash"
         },
-        "qwen3.7-plus": {
-          "name": "Qwen 3.7 Plus"
-        },
-        "glm-5.2": {
-          "name": "GLM-5.2"
+        "deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro"
         }
       }
     }
