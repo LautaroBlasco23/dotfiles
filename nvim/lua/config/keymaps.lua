@@ -18,11 +18,9 @@ map({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 
 -- Buffers
-map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+-- <S-h>/<S-l> and <leader>bd are defined by bufferline/snacks (see plugins/ui.lua)
 map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 map("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
-map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
 map("n", "<leader>bD", "<cmd>%bdelete<cr>", { desc = "Delete all buffers" })
 
 -- Windows
@@ -65,20 +63,17 @@ map("v", ">", ">gv")
 map("x", "p", [["_dP]])
 
 -- Diagnostics navigation
-map("n", "]d", function() vim.diagnostic.goto_next() end, { desc = "Next diagnostic" })
-map("n", "[d", function() vim.diagnostic.goto_prev() end, { desc = "Prev diagnostic" })
-map("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end, { desc = "Next error" })
-map("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end, { desc = "Prev error" })
+map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Next diagnostic" })
+map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Prev diagnostic" })
+map("n", "]e", function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR }) end, { desc = "Next error" })
+map("n", "[e", function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR }) end, { desc = "Prev error" })
 map("n", "<leader>cd", function() vim.diagnostic.open_float() end, { desc = "Line diagnostics" })
 
 -- Terminal
 map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide terminal" })
 map("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Enter normal mode" })
 
--- Formatting
-map({ "n", "v" }, "<leader>cf", function()
-  require("conform").format({ async = true, lsp_fallback = true })
-end, { desc = "Format" })
+-- Formatting: <leader>cf is defined by conform.nvim (see plugins/coding.lua)
 
 -- Search for visual selection with Telescope
 map("v", "//", function()

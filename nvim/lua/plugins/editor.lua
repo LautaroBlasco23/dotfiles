@@ -214,23 +214,6 @@ return {
     },
   },
 
-  -- Git blame
-  {
-    "f-person/git-blame.nvim",
-    event = "BufReadPost",
-    opts = {
-      enabled = false,
-      message_template = "  <author> • <date> • <sha>",
-      date_format = "%d-%m-%Y %H:%M",
-      virtual_text_column = 1,
-    },
-    keys = {
-      { "<leader>gbt", "<cmd>GitBlameToggle<cr>", desc = "Toggle git blame" },
-      { "<leader>gbc", "<cmd>GitBlameCopyCommit<cr>", desc = "Copy commit hash" },
-      { "<leader>gbs", "<cmd>GitBlameCopySHA<cr>", desc = "Copy SHA" },
-    },
-  },
-
   -- Flash - fast navigation with labels
   {
     "folke/flash.nvim",
