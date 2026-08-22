@@ -1,8 +1,10 @@
 return {
   -- Completion engine (modern, faster alternative to nvim-cmp)
+  -- Deferred to InsertEnter; lsp.lua provides equivalent completion
+  -- capabilities manually since blink isn't loaded during LSP setup.
   {
     "saghen/blink.cmp",
-    lazy = false,
+    event = "InsertEnter",
     version = "*",
     dependencies = {
       "rafamadriz/friendly-snippets",

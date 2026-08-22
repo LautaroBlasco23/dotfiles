@@ -1,18 +1,28 @@
 return {
-  -- DAP: Debug Adapter Protocol client
+  -- DAP: Debug Adapter Protocol client (lazy-loaded on first debug keypress)
   {
     "mfussenegger/nvim-dap",
+    lazy = true,
     dependencies = {
       "nvim-neotest/nvim-nio",
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    keys = {
+      { "<leader>da", function() require("dap").continue() end, desc = "Debug: Run / attach config" },
+      { "<leader>dc", function() require("dap").continue() end, desc = "Debug: Continue / start" },
+      { "<leader>do", function() require("dap").step_over() end, desc = "Debug: Step over" },
+      { "<leader>di", function() require("dap").step_into() end, desc = "Debug: Step into" },
+      { "<leader>dO", function() require("dap").step_out() end, desc = "Debug: Step out" },
+      { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Debug: Toggle breakpoint" },
+      { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "Debug: Conditional breakpoint" },
+      { "<leader>dr", function() require("dap").repl.toggle({}, "belowright") end, desc = "Debug: Toggle REPL" },
+      { "<leader>du", function() require("dapui").toggle() end, desc = "Debug: Toggle DAP UI" },
+      { "<leader>de", function() require("dap").evaluate(vim.fn.expand("<cword>")) end, desc = "Debug: Evaluate expression" },
     },
     config = function()
       local dap = require("dap")
       local dap_utils = require("dap.utils")
-
-      -- Signs in the gutter
-      vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpoint", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapLogPoint", linehl = "", numhl = "" })
 
       -- --------------------------------------------------
       -- Go (delve) adapter
@@ -143,17 +153,10 @@ return {
       map("<leader>de", function()
         dap.evaluate(vim.fn.expand("<cword>"))
       end, "Evaluate expression")
-    end,
-  },
 
-  -- DAP UI: scopes, watch, stack, breakpoints, REPL
-  {
-    "rcarriga/nvim-dap-ui",
-    dependencies = {
-      "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio",
-    },
-    config = function()
+      -- --------------------------------------------------
+      -- DAP UI: scopes, watch, stack, breakpoints, REPL
+      -- --------------------------------------------------
       local dapui = require("dapui")
       dapui.setup({
         icons = { expanded = "", collapsed = "", current_frame = "" },
@@ -198,7 +201,6 @@ return {
       })
 
       -- Auto-open UI when debug session starts, close on stop
-      local dap = require("dap")
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
       end
@@ -208,12 +210,9 @@ return {
       dap.listeners.before.event_exited["dapui_config"] = function()
         dapui.close()
       end
-    end,
-  },
 
-  -- Show variable values inline next to the code
-  {
-    "theHamsta/nvim-dap-virtual-text",
-    opts = {},
+      -- Show variable values inline next to the code
+      require("nvim-dap-virtual-text").setup({})
+    end,
   },
 }
