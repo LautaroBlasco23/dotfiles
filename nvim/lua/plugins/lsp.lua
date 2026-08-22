@@ -4,8 +4,8 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+      "mason-org/mason.nvim",
+      "mason-org/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
     },
     config = function()
@@ -28,7 +28,7 @@ return {
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           -- Enable inlay hints if supported
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, { bufnr = event.buf }) then
             map("<leader>uh", function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
             end, "Toggle inlay hints")
@@ -36,17 +36,19 @@ return {
         end,
       })
 
-      -- Extend capabilities with blink.cmp if available, else nvim-cmp
+      -- Client capabilities. blink.cmp lazy-loads on InsertEnter (do NOT
+      -- require it here — that would defeat the deferral), so provide the
+      -- completion capabilities it would normally add: snippets + resolved
+      -- documentation.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      local has_blink, blink = pcall(require, "blink.cmp")
-      if has_blink then
-        capabilities = blink.get_lsp_capabilities(capabilities)
-      else
-        local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-        if has_cmp then
-          capabilities = vim.tbl_deep_extend("force", capabilities, cmp_nvim_lsp.default_capabilities())
-        end
-      end
+      capabilities.textDocument.completion.completionItem = vim.tbl_deep_extend(
+        "force",
+        capabilities.textDocument.completion.completionItem or {},
+        {
+          snippetSupport = true,
+          resolveSupport = { properties = { "documentation", "detail", "additionalTextEdits" } },
+        }
+      )
 
       -- LSP servers to install and configure
       local servers = {
@@ -81,15 +83,16 @@ return {
 
       require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-      require("mason-lspconfig").setup({
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            require("lspconfig")[server_name].setup(server)
-          end,
-        },
-      })
+      -- mason-lspconfig v2: no handlers table. Disable its automatic enable
+      -- (it would also enable formatters like stylua that ship lsp/ entries);
+      -- only the real servers above are registered and enabled explicitly.
+      require("mason-lspconfig").setup({ automatic_enable = false })
+
+      for server_name, server in pairs(servers) do
+        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+        vim.lsp.config(server_name, server)
+        vim.lsp.enable(server_name)
+      end
     end,
   },
 
