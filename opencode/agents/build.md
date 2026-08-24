@@ -1,6 +1,6 @@
 ---
 description: Engineering-oriented agent for analysis, design, and implementation.
-model: opencode-go/deepseek-v4-flash
+model: opencode/x-preview-f-free
 reasoningEffort: high
 temperature: 0.2
 color: "#3B82F6"

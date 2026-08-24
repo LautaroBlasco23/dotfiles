@@ -1,6 +1,6 @@
 ---
 description: Architecture and execution planning. Strong reasoning.
-model: opencode-go/deepseek-v4-pro
+model: opencode/x-preview-f-free
 reasoningEffort: max
 temperature: 0.2
 color: "#F97316"

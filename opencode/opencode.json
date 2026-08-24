@@ -1,6 +1,18 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
+    "opencode": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenCode",
+      "options": {
+        "baseURL": "https://opencode.ai/zen/v1"
+      },
+      "models": {
+        "x-preview-f-free": {
+          "name": "Ox Alpha Free"
+        }
+      }
+    },
     "opencode-go": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "OpenCode Go",
