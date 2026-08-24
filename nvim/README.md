@@ -9,6 +9,7 @@ I've built this config for my own personal usage, based on [kickstart.nvim](http
 - [fd](https://github.com/sharkdp/fd) — required for file search
 - A [Nerd Font](https://www.nerdfonts.com/) — recommended for icons
 - `git`, `make`, `gcc`
+- [`tree-sitter-cli`](https://github.com/tree-sitter/tree-sitter/blob/master/crates/cli/README.md) ≥ 0.26 (in PATH) — required by nvim-treesitter to install parsers
 
 ## Installation
 
@@ -66,7 +67,8 @@ These tools are used by the formatter integration and may be required by plugins
         ├── ui.lua            # Visual layer — bufferline, lualine, noice, which-key, snacks, indent guides, todo-comments
         ├── editor.lua        # Editing tools — telescope, neo-tree, gitsigns, flash, trouble, mini plugins
         ├── lsp.lua           # LSP — mason, nvim-lspconfig, mason-lspconfig, lazydev
-        └── coding.lua        # Coding — blink.cmp (completion), conform (formatting), treesitter
+        ├── coding.lua        # Coding — blink.cmp (completion), conform (formatting), treesitter
+        └── dap.lua           # Debugging — nvim-dap, dap-ui, virtual text (lazy-loaded)
 ```
 
 ---
@@ -105,11 +107,18 @@ These tools are used by the formatter integration and may be required by plugins
 | Plugin | Description |
 |--------|-------------|
 | [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) | LSP client configuration |
-| [mason.nvim](https://github.com/williamboman/mason.nvim) | Auto-installs LSP servers, formatters, and linters |
-| [blink.cmp](https://github.com/Saghen/blink.cmp) | Autocompletion engine |
-| [conform.nvim](https://github.com/stevearc/conform.nvim) | Formatter with format-on-save support |
-| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax highlighting |
+| [mason.nvim](https://github.com/mason-org/mason.nvim) | Auto-installs LSP servers, formatters, and linters |
+| [blink.cmp](https://github.com/Saghen/blink.cmp) | Autocompletion engine (loads on first insert) |
+| [conform.nvim](https://github.com/stevearc/conform.nvim) | Formatter with async format-on-save |
+| [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) | Syntax highlighting and indentation (`main` branch rewrite) |
 | [lazydev.nvim](https://github.com/folke/lazydev.nvim) | Lua LSP awareness of the Neovim API |
+
+### Debugging
+| Plugin | Description |
+|--------|-------------|
+| [nvim-dap](https://github.com/mfussenegger/nvim-dap) | Debug Adapter Protocol client (Go via delve, JS/TS via js-debug-adapter) |
+| [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui) | Debug UI: scopes, watch, stack, breakpoints, REPL (auto-opens on session start) |
+| [nvim-dap-virtual-text](https://github.com/theHamsta/nvim-dap-virtual-text) | Variable values shown inline during debug sessions |
 
 ---
 
@@ -214,6 +223,21 @@ These tools are used by the formatter integration and may be required by plugins
 | `]e` / `[e` | Next / previous error |
 | `<leader>cd` | Show line diagnostic |
 | `<leader>cf` | Format buffer / selection |
+
+### Debugging
+
+The debug suite loads on first use — pressing any of these keys the first time takes a moment.
+
+| Key | What it does |
+|-----|--------------|
+| `<leader>da` | Run / attach debug configuration |
+| `<leader>dc` | Continue / start |
+| `<leader>do` / `<leader>di` / `<leader>dO` | Step over / into / out |
+| `<leader>db` | Toggle breakpoint |
+| `<leader>dB` | Conditional breakpoint (prompts for condition) |
+| `<leader>dr` | Toggle REPL |
+| `<leader>du` | Toggle DAP UI |
+| `<leader>de` | Evaluate expression under cursor |
 
 ### Git
 
