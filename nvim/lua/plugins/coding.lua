@@ -44,7 +44,8 @@ return {
   -- Formatter
   {
     "stevearc/conform.nvim",
-    lazy = true,
+    -- Load when a file opens so async format-on-save works from the first save
+    event = { "BufReadPost", "BufNewFile" },
     cmd = "ConformInfo",
     keys = {
       {
@@ -54,6 +55,8 @@ return {
         desc = "Format buffer",
       },
     },
+    -- Async format on save: never blocks the write; conform re-saves the
+    -- file after formatting completes.
     opts = {
       formatters_by_ft = {
         lua = { "stylua" },
@@ -70,10 +73,7 @@ return {
         python = { "isort", "black" },
         sh = { "shfmt" },
       },
-      format_on_save = {
-        timeout_ms = 3000,
-        lsp_fallback = true,
-      },
+      format_after_save = { lsp_fallback = true },
     },
   },
 
