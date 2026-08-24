@@ -77,20 +77,31 @@ return {
     },
   },
 
-  -- Treesitter - better syntax highlighting
+  -- Treesitter - better syntax highlighting (main branch rewrite)
+  -- Requires tree-sitter-cli >= 0.26 and a C compiler in PATH.
   {
     "nvim-treesitter/nvim-treesitter",
-    commit = "42fc28ba918343ebfd5565147a42a26580579482",
-    lazy = false,
+    branch = "main",
+    lazy = false, -- the rewrite does not support lazy-loading
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        highlight = { enable = true },
-        indent = { enable = true },
-        ensure_installed = { "bash", "regex" },
+      require("nvim-treesitter").install({
+        "bash", "regex", "lua", "vim", "vimdoc", "query",
+        "javascript", "typescript", "tsx", "json",
+        "yaml", "html", "css", "python", "go", "gomod",
+        "markdown", "markdown_inline",
       })
-      -- Fix TSNode[] format incompatibility in Neovim 0.12+ (see config/treesitter.lua)
-      require("config.treesitter")
+
+      -- In the rewrite, highlighting and indentation are opt-in per filetype
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("myconfig_treesitter", { clear = true }),
+        callback = function(args)
+          local ok = pcall(vim.treesitter.start, args.buf)
+          if ok then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
     end,
   },
   -- Comments
