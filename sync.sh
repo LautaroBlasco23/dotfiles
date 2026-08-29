@@ -113,6 +113,43 @@ sync_pair() {
   done <<< "$files"
 }
 
+# Ensure the managed opencode alias block exists in a shell rc file.
+# Idempotent: skips if the alias is already present. Side-effect only.
+ensure_alias() {
+  local rc="$1"
+  local marker_begin="# >>> dotfiles opencode alias >>>"
+  local marker_end="# <<< dotfiles opencode alias <<<"
+
+  if [ ! -f "$rc" ]; then
+    echo "  skip: $rc (not found)"
+    return 0
+  fi
+
+  if grep -qF "alias oc='opencode --auto'" "$rc"; then
+    echo "  ok: alias oc already in $rc"
+    return 0
+  fi
+
+  if [ "$DRY_RUN" = true ]; then
+    echo "  would add alias oc to $rc"
+    return 0
+  fi
+
+  {
+    echo ""
+    echo "$marker_begin"
+    echo "alias oc='opencode --auto'"
+    echo "$marker_end"
+  } >> "$rc"
+  echo "  added: alias oc to $rc"
+}
+
+sync_aliases() {
+  echo "== Shell aliases =="
+  ensure_alias "$HOME/.bashrc"
+  ensure_alias "$HOME/.zshrc"
+}
+
 main() {
   echo "== Dotfiles sync =="
   [ "$DRY_RUN" = true ] && echo "(dry run — nothing will be changed)"
@@ -122,6 +159,7 @@ main() {
   sync_pair "nvim" "$HOME/.config/nvim"
   sync_pair "skills" "$HOME/.claude/skills"
   sync_pair "skills" "$HOME/.opencode/skills"
+  sync_aliases
 
   echo "== Sync complete =="
   if [ "$DRY_RUN" = true ]; then
