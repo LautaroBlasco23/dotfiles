@@ -1,6 +1,6 @@
 ---
 description: Architecture and execution planning. Strong reasoning.
-model: opencode/x-preview-f-free
+model: opencode-go/glm-5.3-flash
 reasoningEffort: max
 temperature: 0.2
 color: "#F97316"

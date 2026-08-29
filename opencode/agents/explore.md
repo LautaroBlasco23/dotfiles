@@ -3,7 +3,7 @@ description: Repository discovery and contextual code exploration. Cheap, fast, 
 model: opencode/x-preview-f-free
 reasoningEffort: high
 temperature: 0.1
-mode: all
+mode: subagent
 color: "#22C55E"
 ---
 # Explore Agent
