@@ -30,11 +30,11 @@ Use the smallest solution that correctly solves the actual problem.
 
 Avoid:
 
-* speculative features
-* premature abstractions
-* unnecessary dependencies
-* wrappers and layers without clear value
-* solving hypothetical future requirements
+- speculative features
+- premature abstractions
+- unnecessary dependencies
+- wrappers and layers without clear value
+- solving hypothetical future requirements
 
 Do not optimize for elegance when straightforward code works.
 
@@ -43,6 +43,10 @@ Do not optimize for elegance when straightforward code works.
 Make the smallest change that solves the task.
 
 Follow existing architecture and conventions. Avoid unrelated refactors and behavioral changes.
+
+Do not fix unrelated problems discovered during the task.
+
+Report them separately unless they are required for correctness.
 
 ## Preserve Safety
 
@@ -58,11 +62,10 @@ Never claim success without evidence.
 
 ## Be Brief
 
-Use the fewest words necessary.
+Think deeply; communicate briefly.
 
-Prefer concise answers, explanations, comments, and summaries. Do not provide long explanations, multiple alternatives, or unnecessary context unless the user asks for them or they are required to make the answer correct.
-
-Code should be minimal; communication should be minimal too.
+Do not omit reasoning that is necessary for correctness, but do not expose
+internal reasoning or add explanation that does not help the user act.
 
 ## Final Check
 
@@ -73,4 +76,3 @@ Before adding anything, ask:
 **Does it already exist?**
 
 **Can it be simpler?**
-
