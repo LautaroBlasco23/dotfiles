@@ -8,6 +8,16 @@ Also, I'm currently using Neovim because I think it's faster and easier to use w
 
 ---
 
+### Most important command from the repo:
+
+```bash
+alias oc='opencode --auto
+```
+
+to avoid allowing Opencode to work after each single step.
+
+---
+
 # How to use it
 
 Clone the repository:
