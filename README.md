@@ -1,69 +1,14 @@
 # Dotfiles
 
-Personal development environment configuration.
+This repository contains the files I use daily to work with my AI Agents (currently using Opencode and Claude Code).
 
-## Workflow
+I'm using opencode the most of the time (personal subscription) to work and to develop personal projects, so ./opencode/ configuration is better defined because of that.
 
-```
-explore → what exists
-plan → what to do
-build → analyze, design, and implement
-validator → verify it
-```
+Also, I'm currently using Neovim because I think it's faster and easier to use when working with Claude Code / Opencode in the terminal. So I have my own "minimalistic" configuration for it.
 
 ---
 
-## Structure
-
-Uses **copy-based syncing** — `sync.sh` copies the tracked configs in this repo to their expected locations as real files (no symlinks). Run `./sync.sh` after `git pull` to apply updates.
-
-| Repo Path | Synced To |
-|---|---|
-| `opencode/` | `~/.config/opencode` |
-| `claude/` | `~/.claude` |
-| `nvim/` | `~/.config/nvim` |
-| `skills/` | `~/.claude/skills`, `~/.opencode/skills` |
-
-Notes:
-
-- Only git-tracked files are copied; machine-local files (`claude/settings.local.json`) are excluded.
-- Sync is one-way (repo → home). Local edits to the copied configs are overwritten on the next run.
-
----
-
-## Skills
-
-Context-injected rules shared by Claude and Opencode. They auto-trigger based on task type, or can be invoked manually with slash commands (e.g. `/caveman`, `/commit`).
-
-| Skill | Description |
-|---|---|
-| `caveman` | Ultra-compressed communication (~75% token reduction). Intensity levels: lite/full/ultra. |
-| `coding-principles` | Universal code quality principles, language-agnostic. |
-| `commit` | Conventional Commits format, atomic commits, no AI metadata. |
-
----
-
-## OpenCode
-
-Defined in `opencode/agents/`.
-
-| Model | ID |
-|---|---|
-| DeepSeek V4 Flash | `opencode-go/deepseek-v4-flash` |
-| Qwen 3.7 Plus | `opencode-go/qwen3.7-plus` |
-
-Agents use `deepseek-v4-flash` for exploring and `qwen3.7-plus` for planning, analysis, and implementation.
-
-| Agent | Description |
-|---|---|
-| `build` | Engineering-oriented agent for analysis, design, and implementation. |
-| `plan` | Architecture and execution planning. |
-| `explorer` | Repository discovery and contextual code exploration. Read-only. |
-| `validator` | Validation and testing analysis. Adversarial reasoning. |
-
----
-
-## Installation
+# How to use it
 
 Clone the repository:
 
@@ -77,23 +22,38 @@ Run the sync (copies configs to `~/.config` and `~/.claude`):
 cd ~/dotfiles && ./sync.sh
 ```
 
-Preview first with `./sync.sh --dry-run`. Re-run after `git pull` to apply updates.
+---
 
-## Partial Install
+## Opencode Agents
 
-Pull individual configs without cloning the full repo:
-
-**OpenCode:**
-
-```bash
-mkdir -p ~/.config/opencode && curl -L https://github.com/lautaroblasco23/dotfiles/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 -C ~/.config/opencode dotfiles-main/opencode
-cd ~/.config/opencode && bun install   # or: npm install
+```
+plan → Most Important agent IMO. I always use this to talk with the LLM and to discuss next steps when working around something.
+build → Main builder, I use this agent to implement code changes.
+build-jr → This Agent only exist because it's easier for me to have a jr Agent with a smaller LLM model (Mimo V2.5 right now) to do the simpler work like updating PRs descriptions, running simple commands, reading basic results from specific sources. Instead of switching model each time I want to spend less tokens.
 ```
 
-**Neovim:**
+---
 
-```bash
-mkdir -p ~/.config/nvim && curl -L https://github.com/lautaroblasco23/dotfiles/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 -C ~/.config/nvim dotfiles-main/nvim
-```
+## Structure
 
-Plugins install on first launch via `lazy.nvim`. Re-run the commands to update.
+| Repo Path   | Synced To                                |
+| ----------- | ---------------------------------------- |
+| `opencode/` | `~/.config/opencode`                     |
+| `claude/`   | `~/.claude`                              |
+| `nvim/`     | `~/.config/nvim`                         |
+| `skills/`   | `~/.claude/skills`, `~/.opencode/skills` |
+
+Notes:
+
+- Only git-tracked files are copied; machine-local files (`claude/settings.local.json`) are excluded.
+- Sync is one-way (repo → home). Local edits to the copied configs are overwritten on the next run.
+
+---
+
+## Skills
+
+Currently empty (my job related skills are not available xd).
+
+---
+
+Feel free to do whatever you want with this repository's data.
