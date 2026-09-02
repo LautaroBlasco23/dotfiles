@@ -147,7 +147,14 @@ return {
     "folke/todo-comments.nvim",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "nvim-lua/plenary.nvim" },
-    opts = { signs = false },
+    opts = {
+      signs = false,
+      keywords = {
+        ["ai-comment"]  = { icon = "💬", color = "info" },
+        ["ai-todo"]     = { icon = "🔧", color = "todo" },
+        ["ai-question"] = { icon = "❓", color = "hint" },
+      },
+    },
     keys = {
       { "]t", function() require("todo-comments").jump_next() end, desc = "Next todo comment" },
       { "[t", function() require("todo-comments").jump_prev() end, desc = "Prev todo comment" },
