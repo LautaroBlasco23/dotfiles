@@ -84,3 +84,22 @@ map("v", "//", function()
   vim.fn.setreg('"', saved_reg, saved_regtype)
   require("telescope.builtin").live_grep({ default_text = text })
 end, { desc = "Grep visual selection" })
+
+-- Copy file path relative to git repo root (:Path or <leader>fp)
+local function copy_path()
+  local path = vim.api.nvim_buf_get_name(0)
+  if path == "" then
+    vim.notify("No file in current buffer", vim.log.levels.WARN, { title = "Copy path" })
+    return
+  end
+  local root, in_git = vim.fs.root(0, ".git"), true
+  if not root then
+    root, in_git = vim.uv.cwd(), false
+  end
+  local rel = path:sub(#root + 2) -- strip root + path separator
+  vim.fn.setreg("+", rel)
+  vim.notify(rel, vim.log.levels.INFO, { title = in_git and "Copied path (git root)" or "Copied path (cwd, not in git repo)" })
+end
+
+vim.api.nvim_create_user_command("Path", copy_path, { desc = "Copy file path relative to git repo root" })
+map("n", "<leader>fp", copy_path, { desc = "Copy file path (git root)" })
