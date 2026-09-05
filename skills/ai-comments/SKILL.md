@@ -13,12 +13,16 @@ description: >-
 The user leaves inline directives in code using three marker types. Your job
 is to resolve each one, then clean up all markers.
 
-Marker line format (any comment prefix: `//`, `#`, `--`):
+Marker format — the directive token itself is the marker. A comment prefix
+(`//`, `#`, `--`) or wrapper (`<!-- -->`, `/* */`) is optional decoration;
+bare directives work in any file type, including `.md`:
 
 ```
 // @ai-comment <instruction>
 # @ai-todo <instruction>
 -- @ai-question <instruction>
+<!-- @ai-todo <instruction> -->
+@ai-todo <instruction>
 ```
 
 ## Workflow
@@ -27,8 +31,11 @@ Marker line format (any comment prefix: `//`, `#`, `--`):
    If no argument, ask which file, or use the file the user referenced in
    their message.
 
-2. **Scan for markers** using the pattern:
-   `^\s*(//|#|--)\s*@ai-(comment|todo|question)\b`
+2. **Scan for markers**: a marker is any line containing an
+   `@ai-comment`, `@ai-todo`, or `@ai-question` directive followed by an
+   instruction, with or without comment syntax. Only scan the target
+   file(s) given as the argument; never treat mentions of these
+   directives in unrelated files as markers.
 
 3. **Treat each marker as an independent THREAD.** For each thread collect:
    - the marker type
@@ -68,8 +75,10 @@ Marker line format (any comment prefix: `//`, `#`, `--`):
 - Never delete non-marker comments.
 - If a `@ai-todo` is ambiguous, ask the user before implementing.
 - **Cleanup only after ALL threads are resolved**: remove every remaining
-  marker line matching the scan pattern. Then verify with grep that zero
-  markers remain in the touched files. If any thread was skipped, do NOT
-  run cleanup.
+  marker. Delete the whole line when it consists only of the marker (plus
+  any comment wrapper); if the directive is embedded in a longer line,
+  strip just the directive and its instruction. Then verify with grep
+  that zero markers remain in the touched files. If any thread was
+  skipped, do NOT run cleanup.
 - Final report in chat: one entry per thread — what was done or answered,
   and which files were touched.

@@ -1,0 +1,17 @@
+{
+  "ai-question": {
+    "prefix": "ai-question",
+    "body": "@ai-question $0",
+    "description": "AI question directive"
+  },
+  "ai-todo": {
+    "prefix": "ai-todo",
+    "body": "@ai-todo $0",
+    "description": "AI todo directive"
+  },
+  "ai-comment": {
+    "prefix": "ai-comment",
+    "body": "@ai-comment $0",
+    "description": "AI comment directive"
+  }
+}
