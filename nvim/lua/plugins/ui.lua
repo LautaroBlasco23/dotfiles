@@ -149,6 +149,9 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
       signs = false,
+      colors = {
+        todo = { "Special", "#F97316" },
+      },
       keywords = {
         ["ai-comment"]  = { icon = "💬", color = "info" },
         ["ai-todo"]     = { icon = "🔧", color = "todo" },
