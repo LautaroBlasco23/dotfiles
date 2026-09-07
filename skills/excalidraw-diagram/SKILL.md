@@ -18,7 +18,12 @@ truth; commit it alongside the rendered outputs.
 
 ## Workflow
 
-1. Ask or decide: style preset + palette (see below). Default: `hand-drawn` + `excalidraw`.
+1. **Always ask the user two questions before generating anything** (use the
+   question tool with selectable options):
+   1. **Style**: `minimal`, `hand-drawn`, `detailed` (see Style presets).
+   2. **Palette**: `excalidraw`, `catppuccin`, `nord`, `gruvbox`, `mono`
+      (see Palettes). Offer "Other" for custom hexes.
+   Never skip this step or pick defaults silently.
 2. Write a Python generator script (helpers below) that emits the `.excalidraw` file.
 3. Render to SVG and PNG (commands below).
 4. View the PNG. Fix overlaps, label overflow, arrow crossings. Re-render.
