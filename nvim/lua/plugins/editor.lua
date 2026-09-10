@@ -199,6 +199,8 @@ return {
         end
         map("n", "]h", function() gs.nav_hunk("next") end, "Next hunk")
         map("n", "[h", function() gs.nav_hunk("prev") end, "Prev hunk")
+        map("n", "<Tab>", function() gs.nav_hunk("next") end, "Next hunk")
+        map("n", "<S-Tab>", function() gs.nav_hunk("prev") end, "Prev hunk")
         map("n", "]H", function() gs.nav_hunk("last") end, "Last hunk")
         map("n", "[H", function() gs.nav_hunk("first") end, "First hunk")
         map({ "n", "x" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage hunk")
