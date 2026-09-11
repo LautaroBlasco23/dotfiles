@@ -29,7 +29,8 @@
 | `<leader>sc` or `<leader>:` | Command history |
 | `<leader>e` | Toggle file explorer (project root) |
 | `<leader>E` | File explorer at current file's directory |
-| `<leader>ge` | Git status explorer |
+| `<leader>ge` | Git explorer (Enter opens file normally) |
+| `<leader>gs` | Git explorer, diff mode (Enter opens file as vimdiff vs HEAD) |
 
 **Inside pickers:** `<C-j>/<C-k>` move · `<C-s>/<C-v>/<C-t>` open in split/vsplit/tab · `<C-q>` send all to quickfix · `<M-q>` send selection to quickfix · `<C-u>/<C-d>` scroll preview · `<esc>` close
 

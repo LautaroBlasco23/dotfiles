@@ -50,7 +50,6 @@ return {
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent files" },
       { "<leader>fg", "<cmd>Telescope git_files<cr>", desc = "Find git files" },
       { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Git commits" },
-      { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Git status" },
       { "<leader>sa", "<cmd>Telescope autocommands<cr>", desc = "Auto commands" },
       { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer fuzzy find" },
       { "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command history" },
@@ -143,7 +142,24 @@ return {
     keys = {
       { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Explorer (root dir)" },
       { "<leader>E", "<cmd>Neotree dir=%:p:h toggle<cr>", desc = "Explorer (current file dir)" },
-      { "<leader>ge", "<cmd>Neotree source=git_status toggle<cr>", desc = "Git explorer" },
+      {
+        "<leader>ge",
+        function()
+          -- plain git explorer: Enter opens files normally
+          vim.g.git_enter_opens_diff = false
+          vim.cmd("Neotree source=git_status toggle")
+        end,
+        desc = "Git explorer",
+      },
+      {
+        "<leader>gs",
+        function()
+          -- git explorer in diff mode: Enter opens the file as a vimdiff vs HEAD
+          vim.g.git_enter_opens_diff = true
+          vim.cmd("Neotree source=git_status toggle")
+        end,
+        desc = "Git status (diff explorer)",
+      },
     },
     opts = {
       sources = { "filesystem", "buffers", "git_status" },
@@ -169,6 +185,33 @@ return {
               vim.fn.setreg("+", path, "c")
             end,
             desc = "Copy path to clipboard",
+          },
+        },
+      },
+      git_status = {
+        window = {
+          mappings = {
+            -- Enter: in diff mode (set by <leader>gs) open the file as an
+            -- editable vimdiff vs HEAD (current version editable, old
+            -- version read-only). Otherwise plain open, like <leader>ge.
+            -- o: always open the plain file. Directories expand/collapse.
+            ["<cr>"] = function(state)
+              local node = state.tree:get_node()
+              local tracked = node and node.type == "file" and not (node.extra and node.extra.git_status or ""):find("%?")
+              if tracked and vim.g.git_enter_opens_diff then
+                require("neo-tree.sources.git_status.commands").open(state)
+                vim.defer_fn(function()
+                  -- diff only if the file buffer is now the active one
+                  local bufname = vim.fn.bufname(vim.api.nvim_get_current_buf())
+                  if bufname ~= "" and vim.fn.fnamemodify(bufname, ":t") == vim.fn.fnamemodify(node:get_id(), ":t") then
+                    pcall(require("gitsigns").diffthis, "HEAD")
+                  end
+                end, 200)
+              else
+                require("neo-tree.sources.git_status.commands").open(state)
+              end
+            end,
+            ["o"] = "open",
           },
         },
       },
