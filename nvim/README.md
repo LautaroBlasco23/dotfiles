@@ -249,7 +249,7 @@ The debug suite loads on first use — pressing any of these keys the first time
 | `<leader>gb` | Git browse |
 | `<leader>gB` | Git blame line |
 | `<leader>gc` | Git commits (telescope) |
-| `<leader>gs` | Git status (telescope) |
+| `<leader>gs` | Toggle inline git diff for current file |
 | `<leader>ge` | Git explorer (neo-tree) |
 | `]h` / `[h` | Next / previous hunk |
 | `<leader>ghs` | Stage hunk |

@@ -1,3 +1,39 @@
+-- Focus next/prev file node in a neo-tree window (Tab / S-Tab). Wraps around
+-- at the ends; without this, those keys fall through to the jumplist
+-- (<C-i>/<C-o>) inside neo-tree.
+local focus_file_rel = function(state, step)
+  local renderer = require("neo-tree.ui.renderer")
+  local current = state.tree:get_node()
+  local current_id = current and current:get_id() or nil
+  local nodes = renderer.get_all_visible_nodes(state.tree)
+  local n = #nodes
+  if n == 0 then
+    return
+  end
+  local start = 0
+  for i, node in ipairs(nodes) do
+    if node:get_id() == current_id then
+      start = i
+      break
+    end
+  end
+  -- cycle through nodes looking for the next/prev file
+  local i = start
+  for _ = 1, n do
+    i = i + step
+    if i > n then
+      i = 1
+    elseif i < 1 then
+      i = n
+    end
+    local node = nodes[i]
+    if node.type == "file" then
+      renderer.focus_node(state, node:get_id())
+      return
+    end
+  end
+end
+
 return {
   -- Fuzzy finder
   {
@@ -142,24 +178,7 @@ return {
     keys = {
       { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Explorer (root dir)" },
       { "<leader>E", "<cmd>Neotree dir=%:p:h toggle<cr>", desc = "Explorer (current file dir)" },
-      {
-        "<leader>ge",
-        function()
-          -- plain git explorer: Enter opens files normally
-          vim.g.git_enter_opens_diff = false
-          vim.cmd("Neotree source=git_status toggle")
-        end,
-        desc = "Git explorer",
-      },
-      {
-        "<leader>gs",
-        function()
-          -- git explorer in diff mode: Enter opens the file as a vimdiff vs HEAD
-          vim.g.git_enter_opens_diff = true
-          vim.cmd("Neotree source=git_status toggle")
-        end,
-        desc = "Git status (diff explorer)",
-      },
+      { "<leader>ge", "<cmd>Neotree source=git_status toggle<cr>", desc = "Git explorer" },
     },
     opts = {
       sources = { "filesystem", "buffers", "git_status" },
@@ -178,6 +197,12 @@ return {
         width = 30,
         mappings = {
           ["<space>"] = "none",
+          ["<Tab>"] = function(state)
+            focus_file_rel(state, 1)
+          end,
+          ["<S-Tab>"] = function(state)
+            focus_file_rel(state, -1)
+          end,
           ["Y"] = {
             function(state)
               local node = state.tree:get_node()
@@ -185,33 +210,6 @@ return {
               vim.fn.setreg("+", path, "c")
             end,
             desc = "Copy path to clipboard",
-          },
-        },
-      },
-      git_status = {
-        window = {
-          mappings = {
-            -- Enter: in diff mode (set by <leader>gs) open the file as an
-            -- editable vimdiff vs HEAD (current version editable, old
-            -- version read-only). Otherwise plain open, like <leader>ge.
-            -- o: always open the plain file. Directories expand/collapse.
-            ["<cr>"] = function(state)
-              local node = state.tree:get_node()
-              local tracked = node and node.type == "file" and not (node.extra and node.extra.git_status or ""):find("%?")
-              if tracked and vim.g.git_enter_opens_diff then
-                require("neo-tree.sources.git_status.commands").open(state)
-                vim.defer_fn(function()
-                  -- diff only if the file buffer is now the active one
-                  local bufname = vim.fn.bufname(vim.api.nvim_get_current_buf())
-                  if bufname ~= "" and vim.fn.fnamemodify(bufname, ":t") == vim.fn.fnamemodify(node:get_id(), ":t") then
-                    pcall(require("gitsigns").diffthis, "HEAD")
-                  end
-                end, 200)
-              else
-                require("neo-tree.sources.git_status.commands").open(state)
-              end
-            end,
-            ["o"] = "open",
           },
         },
       },
@@ -254,6 +252,16 @@ return {
         map("n", "<leader>ghp", gs.preview_hunk_inline, "Preview hunk inline")
         map("n", "<leader>ghb", function() gs.blame_line({ full = true }) end, "Blame line")
         map("n", "<leader>ghd", gs.diffthis, "Diff this")
+        -- Toggle an inline diff view for the current file: deleted lines shown
+        -- inline, changed lines highlighted, word-level diff marks. Same key
+        -- restores the normal view.
+        map("n", "<leader>gs", function()
+          local enable = not require("gitsigns.config").config.show_deleted
+          gs.toggle_deleted(enable)
+          gs.toggle_linehl(enable)
+          gs.toggle_word_diff(enable)
+          gs.refresh()
+        end, "Git diff inline (toggle)")
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "GitSigns select hunk")
       end,
     },
