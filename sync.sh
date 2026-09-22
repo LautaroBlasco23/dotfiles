@@ -16,7 +16,7 @@ Sources:
   opencode/  -> ~/.config/opencode
   claude/    -> ~/.claude          (settings.local.json is excluded)
   nvim/      -> ~/.config/nvim
-  skills/    -> ~/.claude/skills, ~/.opencode/skills
+  skills/    -> ~/.claude/skills, ~/.config/opencode/skills
 
 Options:
   -n, --dry-run   Print what would be copied without changing anything
@@ -158,7 +158,7 @@ main() {
   sync_pair "claude" "$HOME/.claude"
   sync_pair "nvim" "$HOME/.config/nvim"
   sync_pair "skills" "$HOME/.claude/skills"
-  sync_pair "skills" "$HOME/.opencode/skills"
+  sync_pair "skills" "$HOME/.config/opencode/skills"
   sync_aliases
 
   echo "== Sync complete =="
