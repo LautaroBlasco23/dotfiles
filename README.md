@@ -39,7 +39,6 @@ cd ~/dotfiles && ./sync.sh
 ```
 plan → Most Important agent IMO. I always use this to talk with the LLM and to discuss next steps when working around something.
 build → Main builder, I use this agent to implement code changes.
-build-jr → This Agent only exist because it's easier for me to have a jr Agent with a smaller LLM model (Mimo V2.5 right now) to do the simpler work like updating PRs descriptions, running simple commands, reading basic results from specific sources. Instead of switching model each time I want to spend less tokens.
 ```
 
 ---
