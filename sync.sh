@@ -12,6 +12,14 @@ Copies tracked dotfiles from this repo into the user's config directories
 as real files (no symlinks). Sync is one-way: repo -> home. Local edits to
 the copied configs are overwritten on the next run.
 
+Sync wipes and re-copies on every run: self-contained destinations
+(~/.config/nvim, the skills dirs) are removed entirely; shared destinations
+(~/.config/opencode, ~/.claude) only have the repo-managed entries replaced,
+so machine-local files are never touched.
+
+All repo files are synced, not only git-tracked ones. Gitignored files
+(secrets, node_modules, runtime data) are still excluded.
+
 Sources:
   opencode/  -> ~/.config/opencode
   claude/    -> ~/.claude          (settings.local.json is excluded)
@@ -72,14 +80,56 @@ ensure_sync_path() {
   done
 }
 
-sync_pair() {
-  local src="$1" dest="$2"
+# Wipe phase, driven by the file list:
+#   full    -> destination is fully repo-managed: remove it entirely
+#   managed -> destination is shared with machine-local files: remove only
+#              the top-level entries the repo manages
+wipe_dest() {
+  local mode="$1" dest="$2" files="$3" src="$4"
+  local entries name
 
+  if [ "$mode" = full ]; then
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+      if [ "$DRY_RUN" = true ]; then
+        echo "  wipe (dry-run): $dest"
+      else
+        rm -rf "$dest"
+        echo "  wiped: $dest"
+      fi
+    fi
+    return 0
+  fi
+
+  entries="$(printf '%s\n' "$files" | sed "s|^$src/||" | cut -d/ -f1 | sort -u)"
+  while IFS= read -r name; do
+    [ -z "$name" ] && continue
+    if [ -e "$dest/$name" ] || [ -L "$dest/$name" ]; then
+      if [ "$DRY_RUN" = true ]; then
+        echo "  wipe (dry-run): $name"
+      else
+        rm -rf "$dest/$name"
+        echo "  wiped: $name"
+      fi
+    fi
+  done <<< "$entries"
+}
+
+sync_pair() {
+  local src="$1" dest="$2" mode="$3"
+
+  # Tracked + untracked-but-not-ignored files: new local files sync without
+  # needing `git add`; ignored files (secrets, node_modules) stay excluded.
+  # Files deleted from the working tree but still in the index are skipped.
   local files
-  files="$(git -C "$REPO_DIR" ls-files "$src")"
+  files="$(git -C "$REPO_DIR" ls-files --cached --others --exclude-standard -- "$src" |
+    while IFS= read -r f; do
+      if [ -f "$REPO_DIR/$f" ]; then
+        printf '%s\n' "$f"
+      fi
+    done)"
 
   if [ -z "$files" ]; then
-    echo "== $src/ -> $dest/ (nothing tracked, skipped) =="
+    echo "== $src/ -> $dest/ (nothing to sync, skipped) =="
     return 0
   fi
 
@@ -90,6 +140,12 @@ sync_pair() {
     fi
   else
     echo "== $src/ -> $dest/ =="
+  fi
+
+  wipe_dest "$mode" "$dest" "$files" "$src"
+
+  if [ "$mode" = full ] && [ "$DRY_RUN" = false ]; then
+    mkdir -p "$dest"
   fi
 
   while IFS= read -r tracked; do
@@ -154,11 +210,11 @@ main() {
   echo "== Dotfiles sync =="
   [ "$DRY_RUN" = true ] && echo "(dry run — nothing will be changed)"
 
-  sync_pair "opencode" "$HOME/.config/opencode"
-  sync_pair "claude" "$HOME/.claude"
-  sync_pair "nvim" "$HOME/.config/nvim"
-  sync_pair "skills" "$HOME/.claude/skills"
-  sync_pair "skills" "$HOME/.config/opencode/skills"
+  sync_pair "opencode" "$HOME/.config/opencode" managed
+  sync_pair "claude" "$HOME/.claude" managed
+  sync_pair "nvim" "$HOME/.config/nvim" full
+  sync_pair "skills" "$HOME/.claude/skills" full
+  sync_pair "skills" "$HOME/.config/opencode/skills" full
   sync_aliases
 
   echo "== Sync complete =="

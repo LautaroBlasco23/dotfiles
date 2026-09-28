@@ -27,5 +27,8 @@ claude/tasks/
 # Package lock files
 **/package-lock.json
 
+# Dependencies (never versioned, never synced)
+node_modules/
+
 # Environment variables (secrets, tokens)
 .env

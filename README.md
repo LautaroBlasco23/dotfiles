@@ -50,12 +50,13 @@ build → Main builder, I use this agent to implement code changes.
 | `opencode/` | `~/.config/opencode`                     |
 | `claude/`   | `~/.claude`                              |
 | `nvim/`     | `~/.config/nvim`                         |
-| `skills/`   | `~/.claude/skills`, `~/.opencode/skills` |
+| `skills/`   | `~/.claude/skills`, `~/.config/opencode/skills` |
 
 Notes:
 
-- Only git-tracked files are copied; machine-local files (`claude/settings.local.json`) are excluded.
+- All repo files are synced, tracked or not; gitignored files and machine-local files (`claude/settings.local.json`) are excluded.
 - Sync is one-way (repo → home). Local edits to the copied configs are overwritten on the next run.
+- Sync wipes and re-copies: `~/.config/nvim` and the skills directories are removed entirely on each run; `~/.config/opencode` and `~/.claude` only have the repo-managed entries replaced, so machine-local files are never touched.
 
 ---
 
