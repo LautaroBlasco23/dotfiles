@@ -23,6 +23,7 @@ All repo files are synced, not only git-tracked ones. Gitignored files
 Sources:
   opencode/  -> ~/.config/opencode
   claude/    -> ~/.claude          (settings.local.json is excluded)
+  AGENTS.md  -> ~/.config/opencode/AGENTS.md, ~/.claude/CLAUDE.md
   nvim/      -> ~/.config/nvim
   skills/    -> ~/.claude/skills, ~/.config/opencode/skills
 
@@ -169,6 +170,38 @@ sync_pair() {
   done <<< "$files"
 }
 
+# Copy the shared agent instructions under each tool's expected filename.
+sync_agent_instructions() {
+  local src="$REPO_DIR/AGENTS.md"
+  local dest rel
+
+  for dest in "$HOME/.config/opencode/AGENTS.md" "$HOME/.claude/CLAUDE.md"; do
+    rel="${dest#"$HOME/"}"
+    echo "== AGENTS.md -> $dest =="
+
+    if [ ! -f "$src" ]; then
+      echo "Error: source instructions not found: $src" >&2
+      return 1
+    fi
+
+    if [ -L "$dest" ]; then
+      echo "  replacing symlink: $dest -> $(readlink "$dest")"
+      if [ "$DRY_RUN" = false ]; then
+        rm "$dest"
+      fi
+    fi
+
+    if [ "$DRY_RUN" = true ]; then
+      echo "  copy: $rel"
+      continue
+    fi
+
+    mkdir -p "$(dirname "$dest")"
+    cp "$src" "$dest"
+    echo "  copied: $rel"
+  done
+}
+
 # Ensure the managed opencode alias block exists in a shell rc file.
 # Idempotent: skips if the alias is already present. Side-effect only.
 ensure_alias() {
@@ -212,6 +245,7 @@ main() {
 
   sync_pair "opencode" "$HOME/.config/opencode" managed
   sync_pair "claude" "$HOME/.claude" managed
+  sync_agent_instructions
   sync_pair "nvim" "$HOME/.config/nvim" full
   sync_pair "skills" "$HOME/.claude/skills" full
   sync_pair "skills" "$HOME/.config/opencode/skills" full

@@ -40,7 +40,7 @@ Do not optimize for elegance when straightforward code works.
 
 ## Stay Local
 
-Make the smallest change that solves the task.
+Make the smallest change that solves the problem.
 
 Follow existing architecture and conventions. Avoid unrelated refactors and behavioral changes.
 
@@ -64,8 +64,7 @@ Never claim success without evidence.
 
 Think deeply; communicate briefly.
 
-Do not omit reasoning that is necessary for correctness, but do not expose
-internal reasoning or add explanation that does not help the user act.
+Do not omit reasoning that is necessary for correctness, but do not expose internal reasoning or add explanation that does not help the user act.
 
 ## Final Check
 
