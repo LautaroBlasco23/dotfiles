@@ -11,7 +11,7 @@ Also, I'm currently using Neovim because I think it's faster and easier to use w
 ### Most important command from the repo:
 
 ```bash
-alias oc='opencode --auto
+alias oc='opencode --auto'
 ```
 
 to avoid allowing Opencode to work after each single step.
@@ -31,6 +31,23 @@ Run the sync (copies configs to `~/.config` and `~/.claude`):
 ```bash
 cd ~/dotfiles && ./sync.sh
 ```
+
+Install the system tools the configs need (ripgrep, fd, fzf, lazygit, build tools):
+
+```bash
+cd ~/dotfiles && ./install.sh
+```
+
+Or ask sync to run it automatically (`--install-deps`). Sync also warns when a
+required tool is missing on a real run. lazygit comes from its GitHub releases
+(`~/.local/bin/lazygit`) since Fedora doesn't package it; `install.sh` adds
+`~/.local/bin` to PATH in your shell rc if necessary.
+
+## Font (NerdFont)
+
+My Neovim configuration uses NerdFont icons/glyphs. If you haven't set one up yet, download it from:
+
+[nerdfonts.com/font-downloads](https://www.nerdfonts.com/font-downloads)
 
 ---
 
@@ -64,7 +81,11 @@ Notes:
 
 ## Skills
 
-Currently empty (my job related skills are not available xd).
+| Skill                  | Description                                                            |
+| ---------------------- | ---------------------------------------------------------------------- |
+| `ai-comments`          | Process `@ai-comment`, `@ai-todo` and `@ai-question` directives in a file |
+| `excalidraw-diagram`   | Create Excalidraw-style architecture/flow diagrams authored as code (.excalidraw JSON), rendered to SVG + PNG |
+| `progressive-response` | Progressive disclosure for long responses: adds a summary + plan-at-a-glance orientation layer before the detailed content |
 
 ---
 

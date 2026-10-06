@@ -27,15 +27,21 @@ Sources:
   nvim/      -> ~/.config/nvim
   skills/    -> ~/.claude/skills, ~/.config/opencode/skills
 
+Dependencies: run ./install.sh to install the system tools these configs
+require (ripgrep, fd, fzf, lazygit, build tools). Or run sync with
+--install-deps to invoke it automatically when something is missing.
+
 Options:
-  -n, --dry-run   Print what would be copied without changing anything
-  -h, --help      Show this help
+  -n, --dry-run      Print what would be copied without changing anything
+  -i, --install-deps Run install.sh before syncing (installs missing deps)
+  -h, --help         Show this help
 EOF
 }
 
 for arg in "$@"; do
   case "$arg" in
     -n|--dry-run) DRY_RUN=true ;;
+    -i|--install-deps) INSTALL_DEPS=true ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Error: unknown option: $arg" >&2; usage; exit 1 ;;
   esac
@@ -251,7 +257,24 @@ main() {
   sync_pair "skills" "$HOME/.config/opencode/skills" full
   sync_aliases
 
+  # Verify the system tools the configs require. On a missing first run,
+  # install them (not during dry-run) so everything is ready right after sync.
+  if [ "$DRY_RUN" = false ]; then
+    if [ "${INSTALL_DEPS:-}" = true ] || ! "$REPO_DIR/install.sh" --check >/dev/null 2>&1; then
+      echo ""
+      echo "== Dependencies =="
+      if [ "${INSTALL_DEPS:-}" = true ]; then
+        "$REPO_DIR/install.sh" --lazygit-version "${LAZYGIT_VERSION:-latest}" || true
+      elif "$REPO_DIR/install.sh" --check >/dev/null 2>&1; then
+        echo "  ok: all required tools present"
+      fi
+    fi
+  fi
+
   echo "== Sync complete =="
+  echo ""
+  echo "Note: Neovim config expects a NerdFont for proper icons."
+  echo "If you haven't set it up, download one from: https://www.nerdfonts.com/font-downloads"
   if [ "$DRY_RUN" = true ]; then
     echo "Re-run without --dry-run to apply."
   fi
