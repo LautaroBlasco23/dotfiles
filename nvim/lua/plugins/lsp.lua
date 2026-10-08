@@ -81,7 +81,10 @@ return {
         "delve", "js-debug-adapter",
       })
 
-      require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+      require("mason-tool-installer").setup({
+        ensure_installed = ensure_installed,
+        run_at_start = true,
+      })
 
       -- mason-lspconfig v2: no handlers table. Disable its automatic enable
       -- (it would also enable formatters like stylua that ship lsp/ entries);
