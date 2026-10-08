@@ -80,13 +80,13 @@ main() {
   # Packages the config directly requires or that Neovim/Mason assume exist.
   # dnf handles build deps (gcc/make for telescope-fzf-native), so we include
   # them here instead of a separate install step.
-  local PACKAGES=(ripgrep fd-find fzf git gcc make unzip python3 nodejs npm)
+  local PACKAGES=(ripgrep fd-find fzf git gcc make unzip python3 python3-pip nodejs npm)
 
   if [ "${CHECK:-}" = true ]; then
     local missing=()
     local p
     local -A PKG_TO_CMD=([ripgrep]=rg [fd-find]=fd [fzf]=fzf [git]=git \
-      [gcc]=gcc [make]=make [unzip]=unzip [python3]=python3 [nodejs]=node [npm]=npm)
+      [gcc]=gcc [make]=make [unzip]=unzip [python3]=python3 [python3-pip]=pip [nodejs]=node [npm]=npm)
     for p in "${PACKAGES[@]}"; do
       if ! command -v "${PKG_TO_CMD[$p]}" >/dev/null 2>&1; then
         missing+=("$p")
@@ -106,7 +106,7 @@ main() {
   # dnf: install in one pass. Only ask sudo for the packages actually missing.
   local to_install=()
   local -A PKG_TO_CMD=([ripgrep]=rg [fd-find]=fd [fzf]=fzf [git]=git \
-    [gcc]=gcc [make]=make [unzip]=unzip [python3]=python3 [nodejs]=node [npm]=npm)
+    [gcc]=gcc [make]=make [unzip]=unzip [python3]=python3 [python3-pip]=pip [nodejs]=node [npm]=npm)
   local p
   for p in "${PACKAGES[@]}"; do
     if command -v "${PKG_TO_CMD[$p]}" >/dev/null 2>&1; then
