@@ -25,7 +25,7 @@ examples beat a catalog of them.
 1. **Metaphor / analogy** ("Imagine a library where...") — for intuition on a
    genuinely new concept. Drop it once precision matters.
 2. **Diagram or sketch** — for structure, relationships, and data flow.
-   For polished diagrams, use the excalidraw-diagram skill; otherwise a small
+   For polished diagrams, use the ascii-diagram skill; otherwise a small
    inline ASCII/text sketch is fine.
 3. **Concrete scenario** ("Here's how a login request would flow through
    this...") — for behavior over time, step by step, in plain language.
