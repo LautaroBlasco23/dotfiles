@@ -1,3 +1,12 @@
+---
+name: progressive-response
+description: >-
+  Structure long technical responses with an orientation layer (summary plus
+  plan at a glance) before the detailed body. TRIGGER when: producing a
+  multi-phase plan, investigation, review, or analysis. DO NOT TRIGGER for
+  short or simple responses.
+---
+
 # Progressive Disclosure for Long Responses
 
 When a response is substantial (for example: a multi-phase plan, investigation,
