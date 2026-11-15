@@ -77,17 +77,3 @@ Notes:
 - Sync is one-way (repo → home). Local edits to the copied configs are overwritten on the next run.
 - Sync wipes and re-copies: `~/.config/nvim` and the skills directories are removed entirely on each run; `~/.config/opencode` and `~/.claude` only have the repo-managed entries replaced, so machine-local files are never touched.
 
----
-
-## Skills
-
-| Skill                  | Description                                                            |
-| ---------------------- | ---------------------------------------------------------------------- |
-| `ascii-diagram`        | Create, improve, and validate text-based diagrams for technical documentation (ASCII/Unicode) |
-| `example`              | Include simple, effective examples when explaining complex topics, comparing options, or teaching |
-| `progressive-response` | Progressive disclosure for long responses: adds a summary + plan-at-a-glance orientation layer before the detailed content |
-| `status-report`        | Produce a concise status report of a topic: what was done, what's the plan, current state of each item |
-
----
-
-Feel free to do whatever you want with this repository's data.
