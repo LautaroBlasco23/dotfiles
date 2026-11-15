@@ -5,7 +5,7 @@ description: >-
   no nesting, no numbering, no tables. Applies whenever presenting items to the
   user (PRs to review, worktrees, files, todos, and so on).
 metadata:
-  opencode/autoinvoke: false
+  opencode/autoinvoke: true
 ---
 
 # Lists
