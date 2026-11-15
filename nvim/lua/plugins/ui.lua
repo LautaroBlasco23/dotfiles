@@ -152,11 +152,7 @@ return {
       colors = {
         todo = { "Special", "#F97316" },
       },
-      keywords = {
-        ["ai-comment"]  = { icon = "💬", color = "info" },
-        ["ai-todo"]     = { icon = "🔧", color = "todo" },
-        ["ai-question"] = { icon = "❓", color = "hint" },
-      },
+      keywords = {},
     },
     keys = {
       { "]t", function() require("todo-comments").jump_next() end, desc = "Next todo comment" },

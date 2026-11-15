@@ -24,12 +24,6 @@ return {
         use_nvim_cmp_as_default = true,
         nerd_font_variant = "mono",
       },
-      snippets = {
-        -- .jsx/.tsx reuse the JS/TS snippets (nvim/snippets/)
-        extended_filetypes = {
-          javascriptreact = { "javascript" },
-          typescriptreact = { "typescript" },
-        },
       },
       sources = {
         default = { "lsp", "path", "snippets", "buffer", "lazydev" },

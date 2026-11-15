@@ -83,7 +83,6 @@ Notes:
 
 | Skill                  | Description                                                            |
 | ---------------------- | ---------------------------------------------------------------------- |
-| `ai-comments`          | Process `@ai-comment`, `@ai-todo` and `@ai-question` directives in a file |
 | `ascii-diagram`        | Create, improve, and validate text-based diagrams for technical documentation (ASCII/Unicode) |
 | `example`              | Include simple, effective examples when explaining complex topics, comparing options, or teaching |
 | `progressive-response` | Progressive disclosure for long responses: adds a summary + plan-at-a-glance orientation layer before the detailed content |
