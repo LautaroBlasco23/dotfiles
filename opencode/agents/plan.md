@@ -1,7 +1,7 @@
 ---
 description: Architecture and execution planning. Strong reasoning.
 model: opencode-go/glm-5.3
-reasoningEffort: high
+variant: high
 temperature: 0.2
 color: "#F97316"
 ---

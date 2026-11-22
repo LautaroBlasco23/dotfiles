@@ -1,7 +1,7 @@
 ---
 description: Engineering-oriented agent for analysis, design, and implementation.
-model: opencode-go/glm-5.3-flash
-reasoningEffort: high
+model: opencode-go/deepseek-v4.1-flash
+variant: high
 temperature: 0.2
 color: "#3B82F6"
 ---
