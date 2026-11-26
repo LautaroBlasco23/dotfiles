@@ -260,14 +260,15 @@ main() {
   # Verify the system tools the configs require. On a missing first run,
   # install them (not during dry-run) so everything is ready right after sync.
   if [ "$DRY_RUN" = false ]; then
-    if [ "${INSTALL_DEPS:-}" = true ] || ! "$REPO_DIR/install.sh" --check >/dev/null 2>&1; then
+    if [ "${INSTALL_DEPS:-}" = true ]; then
       echo ""
       echo "== Dependencies =="
-      if [ "${INSTALL_DEPS:-}" = true ]; then
-        "$REPO_DIR/install.sh" --lazygit-version "${LAZYGIT_VERSION:-latest}" || true
-      elif "$REPO_DIR/install.sh" --check >/dev/null 2>&1; then
-        echo "  ok: all required tools present"
-      fi
+      "$REPO_DIR/install.sh" --lazygit-version "${LAZYGIT_VERSION:-latest}" || true
+    elif ! "$REPO_DIR/install.sh" --check >/dev/null 2>&1; then
+      echo ""
+      echo "== Dependencies =="
+      "$REPO_DIR/install.sh" --check || true
+      echo "  run ./install.sh or sync.sh --install-deps to install them"
     fi
   fi
 
