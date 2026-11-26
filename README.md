@@ -51,12 +51,37 @@ My Neovim configuration uses NerdFont icons/glyphs. If you haven't set one up ye
 
 ---
 
+## Neovim
+
+Minimal config in `nvim/` → `~/.config/nvim`. Leader is `<Space>`, colorscheme tokyonight-moon, plugin manager lazy.nvim. The full keymap reference lives inside Neovim: press `<leader>?` for buffer-local keys or `<leader>sk` to search all keymaps.
+
+Most-used keys:
+
+- `<leader>ff` / `<leader>fr` — find / recent files
+- `<leader>/` — live grep
+- `<leader>e` — file explorer
+- `<leader>gg` — lazygit
+- `<leader>bd` — delete buffer; `<S-h>` / `<S-l>` — prev / next buffer
+- `gd` / `gr` / `K` — definition / references / hover (LSP)
+- `<leader>cr` / `<leader>ca` — rename / code action
+- `<leader>cf` — format buffer (format-on-save enabled)
+- `<C-/>` — toggle terminal
+- `s` — Flash jump
+
+Workflow notes:
+
+- System clipboard is the default for `y` / `p`.
+- Smart-case search and relative line numbers.
+- Surround prefix is `gs` (e.g. `gsaiw)`), not the mini.surround default.
+- Debugging is attach-based — start Go under delve or Node with `--inspect`, then `<leader>da`.
+
+---
+
 ## Opencode Agents
 
-```
-plan → Most Important agent IMO. I always use this to talk with the LLM and to discuss next steps when working around something.
-build → Main builder, I use this agent to implement code changes.
-```
+- **plan** — architecture and execution planning. Discuss the work and get a plan; after explicit approval it delegates implementation to a build subagent and validates the result.
+- **build** — the implementer. Primary coding agent, and the subagent used by plan and orchestrate.
+- **orchestrate** — delegate-first execution. Decomposes the objective into tasks, delegates every implementation to build subagents, validates results, and loops until done.
 
 ---
 

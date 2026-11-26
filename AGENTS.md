@@ -15,6 +15,7 @@ name a skill — match what they mean, not the exact words they type.
 - Diagram, visualization, architecture or flow chart → **diagram**
 - Presenting a list of items (files, tests, PRs, worktrees, todos) → **lists**
 - `/simple` or "use simple" → **simple** — explicit invocation only; never auto-load
+- `/plan-file` or "save the plan to a file" → **plan-file** — explicit invocation only; never auto-load
 
 Rules:
 
