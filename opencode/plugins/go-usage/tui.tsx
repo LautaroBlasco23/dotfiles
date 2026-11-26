@@ -1,11 +1,14 @@
 import { Plugin } from "@opencode/plugin/tui"
-import { createSignal, Show } from "solid-js"
+import { createMemo, createSignal, Show } from "solid-js"
 
 /** The inference API that shares the Go subscription's origin serves its allowance meters. */
 const USAGE_URL = "https://opencode.ai/zen/go/v1/usage"
 /** Safety poll: the event below covers real work, this catches long idle stretches. */
 const POLL_INTERVAL = 60_000
 const INTEGRATION_ID = "opencode-go"
+/** Sidebar rows stay narrow: label + 20 cells + percent fits the ~38-column content area. */
+const BAR_WIDTH = 20
+const ROW_WIDTH = 38
 
 type Meter = { readonly percent: number; readonly resetsAt?: string }
 type Usage = { readonly rolling?: Meter; readonly weekly?: Meter; readonly monthly?: Meter }
@@ -71,13 +74,57 @@ export default Plugin.define({
     const timer = setInterval(() => void refresh(), POLL_INTERVAL)
     void refresh()
 
+    // Theme tokens are resolved once; a missing token degrades to base/muted instead of failing the render.
+    const text = context.theme.text
+    const muted = text.muted ?? text.base
+    const shade = (value: number) => {
+      const feedback = text.feedback
+      if (value >= 90) return feedback?.error?.base ?? text.base
+      if (value >= 70) return feedback?.warning?.base ?? text.base
+      return feedback?.success?.base ?? text.base
+    }
+
+    /** One meter: a fixed label column, a 20-cell bar and a right-aligned percent, so rows line up. */
+    const Row = (props: { label: string; meter: Meter }) => {
+      const cells = bar(props.meter.percent)
+      const color = shade(props.meter.percent)
+      const label = `${props.label}  `
+      const value = `${percent(props.meter.percent)}%`
+      // Pad to a single 38-column line; the percent lands on the right edge so numbers line up.
+      const gap = Math.max(1, ROW_WIDTH - label.length - BAR_WIDTH - value.length)
+      return (
+        <text wrapMode="none" truncate>
+          <span style={{ fg: muted }}>{label}</span>
+          <span style={{ fg: color }}>{cells.filled}</span>
+          <span style={{ fg: muted }}>{cells.empty}</span>
+          {" ".repeat(gap)}
+          <span style={{ fg: color }}>{value}</span>
+        </text>
+      )
+    }
+
+    // The memo lives inside the rendered component: a setup-level memo would build JSX before a render
+    // owner exists. Here it stays tracked to the signal, so a poll that changes values repaints the bars.
+    const Block = (props: { usage: Usage }) => {
+      const rows = createMemo(() =>
+        METERS.flatMap((meter) => {
+          const value = props.usage[meter.key]
+          return value ? [<Row label={meter.label} meter={value} />] : []
+        }),
+      )
+      return (
+        <box flexDirection="column" width="100%" flexShrink={0}>
+          <text fg={text.base} wrapMode="none" truncate>
+            <b>Go limits</b>
+          </text>
+          {rows()}
+        </box>
+      )
+    }
+
     const Line = () => (
       <Show when={usage()}>
-        {(value) => (
-          <text fg={context.theme.text.muted} wrapMode="none" truncate>
-            {format(value()) ?? ""}
-          </text>
-        )}
+        {(value) => <Block usage={value()} />}
       </Show>
     )
 
@@ -91,12 +138,23 @@ export default Plugin.define({
   },
 })
 
-function format(usage: Usage) {
-  const parts = METERS.flatMap((meter) => {
-    const value = usage[meter.key]
-    return value ? [`${meter.label} ${percent(value.percent)}%`] : []
-  })
-  return parts.length > 0 ? `Go ${parts.join(" · ")}` : undefined
+/** A twenty-cell bar: filled `█`, one `▓` for a fractional cell, empty `░` for the rest. */
+function bar(value: number) {
+  const clamped = Math.min(100, Math.max(0, value))
+  const exact = Math.round((clamped / 100) * BAR_WIDTH * 10) / 10
+  let filled = Math.floor(exact)
+  let remainder = exact - filled
+  // Any non-zero usage keeps at least one filled cell, so a 2% meter still shows movement.
+  if (clamped > 0 && filled === 0) {
+    filled = 1
+    remainder = 0
+  }
+  const partial = remainder >= 0.5 && filled + 1 <= BAR_WIDTH ? 1 : 0
+  const empty = Math.max(0, BAR_WIDTH - filled - partial)
+  return {
+    filled: "█".repeat(filled) + (partial ? "▓" : ""),
+    empty: "░".repeat(empty),
+  }
 }
 
 /** Whole percents above ten, one decimal below, so a small meter still moves visibly. */
