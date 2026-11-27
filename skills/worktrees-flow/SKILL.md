@@ -1,6 +1,6 @@
 ---
 name: worktrees-flow
-description: Work with git worktrees in the container layout — one folder per repository holding the shared .git, a main/ worktree, and all linked worktrees as siblings. TRIGGER when the user says "create a worktree", "work inside a worktree", "use worktrees for this", "in the worktree", mentions the worktree container, or when a task needs its own branch and an isolated checkout. Covers container setup, migrating a plain repo into the layout, adding/removing worktrees, naming, and cleanup. NOT for explaining git worktree internals in general discussion.
+description: Work with git worktrees in the container layout — one folder per repository holding the shared .git, a main/ worktree, and all linked worktrees as siblings. TRIGGER when the user says "create a worktree", "work inside a worktree", "use worktrees for this", "in the worktree", mentions the worktree container, or when a task needs its own branch and an isolated checkout. Covers container setup, migrating a plain repo into the layout, adding/removing worktrees, moving the agent session into a worktree, naming, and cleanup. NOT for explaining git worktree internals in general discussion.
 ---
 
 # Worktrees Flow
@@ -30,13 +30,16 @@ life-tracker/                            ← container (not a worktree itself)
   container.
 - Uncommitted changes stay in exactly one worktree; never duplicate work across
   worktrees.
+- The agent session lives in the worktree it edits. Running git/shell commands
+  in a worktree while the session stays in `main/` does not count.
 
 ## Decision procedure
 
 1. **Classify the repo** (see Detection below): container layout, plain repo, or
    already inside a linked worktree of a container.
 2. **Container layout** → work inside it. If a worktree matching the task
-   already exists (`git worktree list`), reuse it; otherwise create one.
+   already exists (`git worktree list`), reuse it; otherwise create one. Then
+   move the session into that worktree.
 3. **Plain repo** → propose the one-time migration (see Migrating). Wait for
    explicit approval before touching anything.
 4. **Inside a linked worktree** → stay there unless the task belongs on another
@@ -61,7 +64,17 @@ git worktree add ../<name> -b <name>    # new branch + worktree for this task
 # for an existing branch: git worktree add ../<name> <name>
 ```
 
-Do all work inside `<container>/<name>`.
+Do all work inside `<container>/<name>`: move the session into it before the
+first edit (`session.move` in OpenCode, or the Worktrees dialog's `ctrl+m`).
+Creating and entering are one step — for a `featureX` feature:
+
+```bash
+git worktree add ../feat-featureX -b feat-featureX
+```
+
+then point the session at `<container>/feat-featureX`. Moving a session does not
+move files: uncommitted changes stay in the old checkout and the session loses
+sight of them, so commit or stash them first.
 
 ## Creating the container
 
@@ -125,4 +138,12 @@ defeats the layout.
   paths.
 - If the agent platform offers a built-in worktree tool (e.g. OpenCode's
   `worktree_create`), use it only if it places the worktree inside this
-  container with matching naming; otherwise use the git commands above.
+  container with matching naming; otherwise use the git commands above. Either
+  way, move the session into the new worktree.
+- **Move the session, not just the shell.** `cd`-ing into a worktree leaves the
+  session anchored to its old location, so worktree-aware features (TUI footer
+  badge, snapshots, revert) keep pointing at `main/`. After `git worktree add`,
+  or when picking an existing worktree, move the session there before touching
+  files. The TUI's footer badge only appears after the session's first file
+  read/edit inside the worktree, so expect the badge to update then, not at the
+  move itself.
