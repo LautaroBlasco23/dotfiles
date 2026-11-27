@@ -50,13 +50,15 @@ function longest(entries: Entry[], file: string): Entry | undefined {
 }
 
 // The HTTP worktree list never carries the `type` field the server derives
-// internally, so classify against the project's main directories instead.
-// Roots are the canonical checkout and its sandboxes; a linked worktree sits
-// outside all of them. `strategy` is only stored on managed worktrees, so its
-// presence is the fallback signal when project data is unavailable.
+// internally. `strategy` is the reliable replacement: the server stores it only
+// on managed worktrees and leaves it unset on roots. Containment cannot win
+// first: in the container layout (shared .git, main/ and linked worktrees as
+// siblings) every linked worktree sits inside the project's canonical
+// directory, so it would be mistaken for a root. Use containment only when the
+// entry has no strategy at all.
 function kindOf(directory: string, roots: readonly string[], strategy: unknown): Kind {
-  if (roots.length > 0) return roots.some((root) => contains(root, directory)) ? "root" : "worktree"
   if (typeof strategy === "string" && strategy.length > 0) return "worktree"
+  if (roots.length > 0) return roots.some((root) => contains(root, directory)) ? "root" : "worktree"
   return "root"
 }
 
